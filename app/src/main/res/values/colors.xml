@@ -28,7 +28,13 @@
     <color name="primary_20">#332E7D32</color>
     
     <color name="surface_container_low">#F3F3F3</color>
+    <color name="surface_container">#EEEEEE</color>
+    <color name="surface_container_high">#E8E8E8</color>
+    <color name="surface_container_highest">#E2E2E2</color>
+    <color name="surface_container_lowest">#FFFFFF</color>
     <color name="ai_insight_bg">#4DC9E7CA</color>
+    <color name="star_yellow">#FFC107</color>
+    <color name="info_box_bg">#202E7D32</color>
     
     <color name="black">#FF000000</color>
 

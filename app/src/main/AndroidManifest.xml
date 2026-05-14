@@ -28,6 +28,10 @@
             android:name=".MenuTodayActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".MenuWeekActivity"
+            android:exported="false" />
+
 
         <activity
             android:name=".LoginActivity"
@@ -36,6 +40,11 @@
 
         <activity
             android:name=".SignupActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ReviewWriteActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
             
