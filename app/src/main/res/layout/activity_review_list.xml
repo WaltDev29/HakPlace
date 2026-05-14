@@ -73,13 +73,19 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinnerSort"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSort"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_day_inactive"
-                android:paddingHorizontal="12dp"
-                android:entries="@array/sort_options" />
+                android:minWidth="100dp"
+                android:background="@drawable/bg_spinner_filter"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="32dp"
+                android:text="최신순"
+                android:textAllCaps="false"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="0dp"
@@ -90,7 +96,7 @@
                 android:id="@+id/btnDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_day_inactive"
+                android:background="@drawable/bg_filter_button"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="8dp"
                 android:paddingHorizontal="16dp"

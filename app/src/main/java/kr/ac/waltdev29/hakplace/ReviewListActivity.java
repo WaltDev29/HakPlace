@@ -37,8 +37,8 @@ public class ReviewListActivity extends AppCompatActivity {
     private RecyclerView rvReviews;
     private ReviewAdapter adapter;
     private ApiService apiService;
-    private Spinner spinnerSort;
-    private Button btnDatePicker;
+    private android.widget.Button btnSort;
+    private android.widget.Button btnDatePicker;
     private ChipGroup chipGroupMealType;
 
     private String currentSort = "newest";
@@ -54,7 +54,7 @@ public class ReviewListActivity extends AppCompatActivity {
         apiService = ApiClient.getClient().create(ApiService.class);
 
         rvReviews = findViewById(R.id.rvReviews);
-        spinnerSort = findViewById(R.id.spinnerSort);
+        btnSort = findViewById(R.id.btnSort);
         btnDatePicker = findViewById(R.id.btnDatePicker);
         chipGroupMealType = findViewById(R.id.chipGroupMealType);
 
@@ -81,27 +81,7 @@ public class ReviewListActivity extends AppCompatActivity {
     private List<ReviewResponse> allReviewsFromApi = new ArrayList<>();
 
     private void setupFilters() {
-        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        currentSort = "newest";
-                        break;
-                    case 1:
-                        currentSort = "rating_desc";
-                        break;
-                    case 2:
-                        currentSort = "rating_asc";
-                        break;
-                }
-                updateDisplayList();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        btnSort.setOnClickListener(v -> showSortMenu());
 
         btnDatePicker.setOnClickListener(v -> {
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
@@ -125,6 +105,32 @@ public class ReviewListActivity extends AppCompatActivity {
         chipGroupMealType.setOnCheckedStateChangeListener((group, checkedIds) -> {
             updateCurrentMealIdByChip();
         });
+    }
+
+    private void showSortMenu() {
+        android.view.ContextThemeWrapper contextWrapper = new android.view.ContextThemeWrapper(this, R.style.SortPopupMenuStyle);
+        androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(contextWrapper, btnSort);
+        popup.getMenu().add(0, 0, 0, "최신순");
+        popup.getMenu().add(0, 1, 1, "평점 높은 순");
+        popup.getMenu().add(0, 2, 2, "평점 낮은 순");
+
+        popup.setOnMenuItemClickListener(item -> {
+            btnSort.setText(item.getTitle());
+            switch (item.getItemId()) {
+                case 0:
+                    currentSort = "newest";
+                    break;
+                case 1:
+                    currentSort = "rating_desc";
+                    break;
+                case 2:
+                    currentSort = "rating_asc";
+                    break;
+            }
+            updateDisplayList();
+            return true;
+        });
+        popup.show();
     }
 
     private void updateDateButton() {
