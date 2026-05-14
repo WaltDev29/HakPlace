@@ -47,6 +47,10 @@
             android:name=".ReviewWriteActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ReviewListActivity"
+            android:exported="false" />
             
     </application>
 

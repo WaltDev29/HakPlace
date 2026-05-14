@@ -120,7 +120,11 @@ public class MenuWeekActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuTodayActivity.class));
                 finish();
                 return true;
-            } else if (id == R.id.nav_stats || id == R.id.nav_review || id == R.id.nav_mypage) {
+            } else if (id == R.id.nav_review) {
+                startActivity(new Intent(this, ReviewListActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_stats || id == R.id.nav_mypage) {
                 Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -317,7 +321,9 @@ public class MenuWeekActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         btnView.setOnClickListener(v -> {
-            Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ReviewListActivity.class);
+            intent.putExtra("meal_id", meal.meal_id);
+            startActivity(intent);
             dialog.dismiss();
         });
 

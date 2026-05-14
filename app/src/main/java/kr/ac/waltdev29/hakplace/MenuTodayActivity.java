@@ -74,7 +74,11 @@ public class MenuTodayActivity extends AppCompatActivity {
                 startActivity(new android.content.Intent(this, MenuWeekActivity.class));
                 finish();
                 return true;
-            } else if (id == R.id.nav_stats || id == R.id.nav_review
+            } else if (id == R.id.nav_review) {
+                startActivity(new android.content.Intent(this, ReviewListActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_stats
                     || id == R.id.nav_mypage) {
                 Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
                 return false;
@@ -223,7 +227,9 @@ public class MenuTodayActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         btnView.setOnClickListener(v -> {
-            Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
+            android.content.Intent intent = new android.content.Intent(this, ReviewListActivity.class);
+            intent.putExtra("meal_id", meal.meal_id);
+            startActivity(intent);
             dialog.dismiss();
         });
 
