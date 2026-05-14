@@ -13,13 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.ChipGroup;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.ApiService;
 import kr.ac.waltdev29.hakplace.api.models.DailyMeals;
 import kr.ac.waltdev29.hakplace.api.models.ReviewList;
+import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,16 +75,18 @@ public class ReviewListActivity extends AppCompatActivity {
         fetchMealsOfDate();
     }
 
+    private List<ReviewResponse> allReviewsFromApi = new ArrayList<>();
+
     private void setupFilters() {
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0: currentSort = "newest"; break;
-                    case 1: currentSort = "rating_high"; break; // Check API supported values
-                    case 2: currentSort = "rating_low"; break;
+                    case 1: currentSort = "rating_desc"; break;
+                    case 2: currentSort = "rating_asc"; break;
                 }
-                fetchReviews();
+                updateDisplayList();
             }
 
             @Override
@@ -94,24 +102,7 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         chipGroupMealType.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
-            int id = checkedIds.get(0);
-            if (id == R.id.chipAll) {
-                currentMealId = null;
-            } else if (id == R.id.chipBreakfast) {
-                currentMealId = (mealsOfDate != null && mealsOfDate.breakfast != null) ? mealsOfDate.breakfast.meal_id : -1;
-            } else if (id == R.id.chipLunch) {
-                currentMealId = (mealsOfDate != null && mealsOfDate.lunch != null) ? mealsOfDate.lunch.meal_id : -1;
-            } else if (id == R.id.chipDinner) {
-                currentMealId = (mealsOfDate != null && mealsOfDate.dinner != null) ? mealsOfDate.dinner.meal_id : -1;
-            }
-            
-            if (currentMealId != null && currentMealId == -1) {
-                Toast.makeText(this, "해당 식단 정보가 없습니다.", Toast.LENGTH_SHORT).show();
-                adapter.setReviews(new java.util.ArrayList<>());
-            } else {
-                fetchReviews();
-            }
+            updateCurrentMealIdByChip();
         });
     }
 
@@ -129,7 +120,16 @@ public class ReviewListActivity extends AppCompatActivity {
             public void onResponse(Call<DailyMeals> call, Response<DailyMeals> response) {
                 if (response.isSuccessful()) {
                     mealsOfDate = response.body();
-                    // If a specific meal type was already selected, update currentMealId and refresh
+                    
+                    // Update adapter mapping
+                    if (mealsOfDate != null) {
+                        Map<Integer, String> mapping = new HashMap<>();
+                        if (mealsOfDate.breakfast != null) mapping.put(mealsOfDate.breakfast.meal_id, "조식");
+                        if (mealsOfDate.lunch != null) mapping.put(mealsOfDate.lunch.meal_id, "중식");
+                        if (mealsOfDate.dinner != null) mapping.put(mealsOfDate.dinner.meal_id, "석식");
+                        adapter.setMealTypeMapping(mapping);
+                    }
+                    
                     updateCurrentMealIdByChip();
                 }
             }
@@ -151,17 +151,23 @@ public class ReviewListActivity extends AppCompatActivity {
             currentMealId = (mealsOfDate != null && mealsOfDate.dinner != null) ? mealsOfDate.dinner.meal_id : -1;
         }
         
-        if (currentMealId != null) {
-             fetchReviews();
+        if (currentMealId != null && currentMealId == -1) {
+            Toast.makeText(this, "해당 식단 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            allReviewsFromApi = new ArrayList<>();
+            updateDisplayList();
+        } else {
+            fetchReviews();
         }
     }
 
     private void fetchReviews() {
-        apiService.listReviews(currentMealId, null, currentSort).enqueue(new Callback<ReviewList>() {
+        // Fetch with newest by default, then sort locally
+        apiService.listReviews(currentMealId, null, "newest").enqueue(new Callback<ReviewList>() {
             @Override
             public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter.setReviews(response.body().reviews);
+                    allReviewsFromApi = response.body().reviews;
+                    updateDisplayList();
                 } else {
                     Toast.makeText(ReviewListActivity.this, "리뷰를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -172,6 +178,40 @@ public class ReviewListActivity extends AppCompatActivity {
                 Toast.makeText(ReviewListActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateDisplayList() {
+        List<ReviewResponse> displayList = new ArrayList<>(allReviewsFromApi);
+
+        // 1. Filtering (if "All" selected for specific date)
+        if (currentMealId == null && mealsOfDate != null) {
+            List<Integer> validMealIds = new ArrayList<>();
+            if (mealsOfDate.breakfast != null) validMealIds.add(mealsOfDate.breakfast.meal_id);
+            if (mealsOfDate.lunch != null) validMealIds.add(mealsOfDate.lunch.meal_id);
+            if (mealsOfDate.dinner != null) validMealIds.add(mealsOfDate.dinner.meal_id);
+            
+            List<ReviewResponse> filtered = new ArrayList<>();
+            for (ReviewResponse r : displayList) {
+                if (validMealIds.contains(r.meal_id)) {
+                    filtered.add(r);
+                }
+            }
+            displayList = filtered;
+        }
+
+        // 2. Sorting
+        Collections.sort(displayList, (r1, r2) -> {
+            if ("rating_desc".equals(currentSort)) {
+                return Double.compare(r2.rating, r1.rating);
+            } else if ("rating_asc".equals(currentSort)) {
+                return Double.compare(r1.rating, r2.rating);
+            } else {
+                // newest: compare created_at strings (desc)
+                return r2.created_at.compareTo(r1.created_at);
+            }
+        });
+
+        adapter.setReviews(displayList);
     }
 
     private void setupBottomNav() {

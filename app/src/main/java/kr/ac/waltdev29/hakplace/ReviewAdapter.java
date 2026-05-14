@@ -19,9 +19,15 @@ import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
     private List<ReviewResponse> reviews = new ArrayList<>();
+    private java.util.Map<Integer, String> mealTypeMapping = new java.util.HashMap<>();
 
     public void setReviews(List<ReviewResponse> reviews) {
         this.reviews = reviews;
+        notifyDataSetChanged();
+    }
+
+    public void setMealTypeMapping(java.util.Map<Integer, String> mapping) {
+        this.mealTypeMapping = mapping;
         notifyDataSetChanged();
     }
 
@@ -36,9 +42,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         ReviewResponse review = reviews.get(position);
 
-        // Meal Type - API doesn't provide this directly, using meal_id as placeholder or generic
-        // In a real app, you might want to fetch meal info or have the API include the type.
-        holder.tvMealType.setText("식단 #" + review.meal_id);
+        String type = mealTypeMapping.get(review.meal_id);
+        if (type == null) type = "식단 #" + review.meal_id;
+        holder.tvMealType.setText(type);
         
         holder.tvRating.setText(String.format(Locale.getDefault(), "%.1f", review.rating));
         holder.tvComment.setText(review.review_comment);
