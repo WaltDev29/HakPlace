@@ -18,6 +18,7 @@ import retrofit2.Response;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -86,22 +87,22 @@ public class SignupActivity extends AppCompatActivity {
 
         if (name.isEmpty() || studentId.isEmpty() || birthDate.isEmpty() || phone.isEmpty() || password.isEmpty()
                 || confirmPassword.isEmpty() || gender.isEmpty()) {
-            Toast.makeText(this, "모든 정보를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            DialogHelper.showNotificationDialog(this, "입력 오류", "모든 정보를 입력해 주세요.", null);
             return;
         }
 
         if (studentId.length() != 10) {
-            Toast.makeText(this, "학번 10자리를 정확히 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            DialogHelper.showNotificationDialog(this, "입력 오류", "학번 10자리를 정확히 입력해 주세요.", null);
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호가 일치하지 않습니다.", null);
             return;
         }
 
         if (password.length() < 8) {
-            Toast.makeText(this, "비밀번호는 영문, 숫자 포함 8자 이상이어야 합니다.", Toast.LENGTH_SHORT).show();
+            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호는 영문, 숫자 포함 8자 이상이어야 합니다.", null);
             return;
         }
 
@@ -127,14 +128,14 @@ public class SignupActivity extends AppCompatActivity {
                     if (response.errorBody() != null) {
                         errorMsg = kr.ac.waltdev29.hakplace.api.ErrorUtils.parseError(response.errorBody());
                     }
-                    Toast.makeText(SignupActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                    DialogHelper.showNotificationDialog(SignupActivity.this, "가입 실패", errorMsg, null);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 btnSignup.setEnabled(true);
-                Toast.makeText(SignupActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                DialogHelper.showNotificationDialog(SignupActivity.this, "연결 실패", "서버 연결에 실패했습니다: " + t.getMessage(), null);
             }
         });
 

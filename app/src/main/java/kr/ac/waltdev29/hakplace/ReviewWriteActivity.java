@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 
 import java.util.Locale;
 
@@ -94,7 +95,19 @@ public class ReviewWriteActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        btnSubmit.setOnClickListener(v -> submitReview());
+        btnSubmit.setOnClickListener(v -> {
+            DialogHelper.showConfirmDialog(this, "리뷰 등록", "작성하신 리뷰를 등록하시겠습니까?", new DialogHelper.OnDialogListener() {
+                @Override
+                public void onConfirm() {
+                    submitReview();
+                }
+
+                @Override
+                public void onCancel() {
+                    // Do nothing
+                }
+            });
+        });
     }
 
     private void setRating(int rating) {

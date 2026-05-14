@@ -35,21 +35,21 @@
     <string name="policy_text">가입 시 Hakplace의 이용약관 및 개인정보 처리방침에 동의하게 됩니다.</string>
 
     <!-- Main Page (Today's Menu) -->
-    <string name="main_title">오늘의 학식</string>
+    <string name="main_title">오늘 학식</string>
     <string name="breakfast">조식</string>
     <string name="lunch">중식</string>
     <string name="dinner">석식</string>
     <string name="breakfast_time">08:00 ~ 09:30</string>
     <string name="lunch_time">11:30 ~ 13:30</string>
     <string name="dinner_time">17:00 ~ 18:30</string>
-    <string name="tab_today">오늘 메뉴</string>
-    <string name="tab_weekly">금주 메뉴</string>
+    <string name="tab_today">오늘 학식</string>
+    <string name="tab_weekly">이번주 학식</string>
     <string name="tab_stats">평점 통계</string>
     <string name="tab_review">리뷰</string>
     <string name="tab_mypage">마이페이지</string>
 
     <!-- Weekly Menu -->
-    <string name="weekly_menu_title">금주 학식</string>
+    <string name="weekly_menu_title">이번주 학식</string>
     <string name="mon">월</string>
     <string name="tue">화</string>
     <string name="wed">수</string>

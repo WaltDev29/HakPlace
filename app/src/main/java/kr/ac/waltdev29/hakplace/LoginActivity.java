@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import kr.ac.waltdev29.hakplace.api.ApiClient;
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (studentId.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "학번과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            DialogHelper.showNotificationDialog(this, "입력 오류", "학번과 비밀번호를 입력해주세요.", null);
             return;
         }
 
@@ -84,14 +85,14 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.errorBody() != null) {
                         errorMsg = kr.ac.waltdev29.hakplace.api.ErrorUtils.parseError(response.errorBody());
                     }
-                    Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                    DialogHelper.showNotificationDialog(LoginActivity.this, "로그인 실패", errorMsg, null);
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
                 btnLogin.setEnabled(true);
-                Toast.makeText(LoginActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                DialogHelper.showNotificationDialog(LoginActivity.this, "연결 실패", "서버 연결에 실패했습니다: " + t.getMessage(), null);
             }
         });
     }

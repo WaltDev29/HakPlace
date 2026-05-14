@@ -99,8 +99,8 @@ public class MenuWeekActivity extends AppCompatActivity {
     }
 
     private void setupMealCards() {
-        updateCardHeader(cardBreakfast, "조식", R.drawable.ic_sun, "08:00 ~ 09:30");
-        updateCardHeader(cardLunch, "중식", R.drawable.ic_lunch, "11:30 ~ 13:30");
+        updateCardHeader(cardBreakfast, "조식", R.drawable.ic_sun_blue, "08:00 ~ 09:30");
+        updateCardHeader(cardLunch, "중식", R.drawable.ic_sun, "11:30 ~ 13:30");
         updateCardHeader(cardDinner, "석식", R.drawable.ic_dinner, "17:00 ~ 18:30");
     }
 
@@ -125,7 +125,11 @@ public class MenuWeekActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ReviewListActivity.class));
                 finish();
                 return true;
-            } else if (id == R.id.nav_stats || id == R.id.nav_mypage) {
+            } else if (id == R.id.nav_mypage) {
+                startActivity(new Intent(this, MyPageActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_stats) {
                 Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
                 return false;
             }

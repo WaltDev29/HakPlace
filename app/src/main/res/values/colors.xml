@@ -16,10 +16,12 @@
     <color name="surface_variant">#E2E2E2</color>
     
     <color name="outline">#707A6C</color>
+    <color name="outline_variant">#BFCABA</color>
     <color name="on_surface_variant">#40493D</color>
     
     <color name="error">#BA1A1A</color>
     <color name="primary_variant">#0D631B</color>
+    <color name="on_secondary_container">#4E6952</color>
 
     
     <!-- Custom & Opacity Variants -->

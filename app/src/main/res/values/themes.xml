@@ -26,4 +26,20 @@
     <style name="GreenDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/primary</item>
     </style>
+
+    <!-- 컴팩트한 정렬 메뉴 전용 테마 -->
+    <style name="SortPopupMenuStyle" parent="Widget.Material3.PopupMenu">
+
+        <!-- 핵심 -->
+        <item name="android:popupBackground">@drawable/popup_bg</item>
+
+        <!-- Material3 tint 제거 -->
+        <item name="colorSurface">@android:color/white</item>
+        <item name="colorSurfaceContainer">@android:color/white</item>
+        <item name="colorSurfaceContainerHigh">@android:color/white</item>
+
+        <!-- 보라 overlay 제거 -->
+        <item name="elevationOverlayEnabled">false</item>
+
+    </style>
 </resources>
