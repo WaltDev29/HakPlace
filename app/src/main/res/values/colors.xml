@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Brand Colors (from DESIGN.md) -->
+    <color name="primary">#2E7D32</color> <!-- Primary Green -->
+    <color name="primary_container">#2E7D32</color>
+    <color name="on_primary">#FFFFFF</color>
+    
+    <color name="secondary">#4A654E</color>
+    <color name="secondary_container">#C9E7CA</color>
+    
+    <color name="background">#F9F9F9</color>
+    <color name="on_background">#1A1C1C</color>
+    
+    <color name="surface">#F9F9F9</color>
+    <color name="on_surface">#1A1C1C</color>
+    <color name="surface_variant">#E2E2E2</color>
+    
+    <color name="outline">#707A6C</color>
+    <color name="on_surface_variant">#40493D</color>
+    
+    <color name="error">#BA1A1A</color>
+    <color name="primary_variant">#0D631B</color>
+
+    
+    <!-- Custom & Opacity Variants -->
+    <color name="primary_80">#CC2E7D32</color>
+    <color name="primary_40">#662E7D32</color>
+    <color name="primary_20">#332E7D32</color>
+    
+    <color name="surface_container_low">#F3F3F3</color>
+    <color name="ai_insight_bg">#4DC9E7CA</color>
+    
     <color name="black">#FF000000</color>
+
     <color name="white">#FFFFFFFF</color>
 </resources>

@@ -1,3 +1,50 @@
 <resources>
-    <string name="app_name">HakPlace</string>
+    <string name="app_name">Hakplace</string>
+    <string name="splash_slogan">식사가 즐거워지는 순간, 학플</string>
+    
+    <!-- Login Page -->
+    <string name="login_slogan">식사가 즐거워지는 순간, 학플</string>
+    <string name="student_id_label">학번</string>
+    <string name="student_id_hint">학번을 입력해주세요</string>
+    <string name="password_label">비밀번호</string>
+    <string name="password_hint">비밀번호를 입력해주세요</string>
+    <string name="login_button">로그인</string>
+    <string name="auto_login">자동 로그인</string>
+    <string name="find_password">비밀번호 찾기</string>
+    <string name="no_account_prompt">계정이 없으신가요?</string>
+    <string name="signup_button">회원가입</string>
+    
+    <!-- Signup Page -->
+    <string name="signup_title">회원가입</string>
+    <string name="name_label">이름</string>
+    <string name="name_hint">이름을 입력하세요</string>
+    <string name="student_id_hint_signup">학번 10자리를 입력하세요</string>
+    <string name="birth_date_label">생년월일</string>
+    <string name="birth_date_hint">YYYY-MM-DD</string>
+    <string name="phone_label">전화번호</string>
+    <string name="phone_hint">010-0000-0000</string>
+    <string name="gender_label">성별</string>
+    <string name="gender_male">남</string>
+    <string name="gender_female">여</string>
+
+    <string name="password_confirm_label">비밀번호 확인</string>
+
+    <string name="password_confirm_hint">비밀번호를 한번 더 입력하세요</string>
+    <string name="password_hint_text">비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상으로 설정해 주세요.</string>
+    <string name="cancel_button">취소</string>
+    <string name="policy_text">가입 시 Hakplace의 이용약관 및 개인정보 처리방침에 동의하게 됩니다.</string>
+
+    <!-- Main Page (Today's Menu) -->
+    <string name="main_title">오늘의 학식</string>
+    <string name="breakfast">조식</string>
+    <string name="lunch">중식</string>
+    <string name="dinner">석식</string>
+    <string name="breakfast_time">08:00 ~ 09:30</string>
+    <string name="lunch_time">11:30 ~ 13:30</string>
+    <string name="dinner_time">17:00 ~ 18:30</string>
+    <string name="tab_today">오늘 메뉴</string>
+    <string name="tab_weekly">금주 메뉴</string>
+    <string name="tab_stats">평점 통계</string>
+    <string name="tab_review">리뷰</string>
+    <string name="tab_mypage">마이페이지</string>
 </resources>

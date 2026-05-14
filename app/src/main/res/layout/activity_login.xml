@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login_gradient"
+    android:fillViewport="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:id="@+id/headerSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    android:src="@drawable/logo" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/app_name"
+                android:textColor="@color/primary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/login_slogan"
+                android:textColor="@color/on_surface"
+                android:alpha="0.7"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Login Form Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loginCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_card"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/headerSection">
+
+            <!-- Student ID -->
+            <TextView
+                android:id="@+id/lblStudentId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/student_id_label"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etStudentId"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input"
+                android:drawableStart="@drawable/ic_badge"
+                android:drawablePadding="12dp"
+                android:hint="@string/student_id_hint"
+                android:inputType="text"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/lblStudentId" />
+
+            <!-- Password -->
+            <TextView
+                android:id="@+id/lblPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/password_label"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etStudentId" />
+
+            <FrameLayout
+                android:id="@+id/passwordContainer"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/lblPassword">
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_input"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="12dp"
+                    android:hint="@string/password_hint"
+                    android:inputType="textPassword"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="48dp"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/btnTogglePassword"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_visibility"
+                    app:tint="@color/outline" />
+            </FrameLayout>
+
+
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/primary"
+                android:text="@string/login_button"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/passwordContainer" />
+
+
+            <!-- Sub Actions -->
+            <CheckBox
+                android:id="@+id/cbAutoLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/auto_login"
+                android:textColor="@color/on_surface"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+            <TextView
+                android:id="@+id/tvFindPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/find_password"
+                android:textColor="@color/on_surface"
+                android:alpha="0.7"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/cbAutoLogin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cbAutoLogin" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Signup Footer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/loginCard">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_account_prompt"
+                android:textColor="@color/on_surface"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnGoSignup"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/signup_button"
+                android:textColor="@color/primary"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/primary" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

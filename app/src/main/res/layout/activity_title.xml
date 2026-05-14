@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Splash Content Container -->
+    <LinearLayout
+        android:id="@+id/logoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Logo Element -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo" />
+
+        <!-- Brand Text Content -->
+        <TextView
+            android:id="@+id/txtAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:includeFontPadding="false"
+            android:text="@string/app_name"
+            android:textColor="@color/primary"
+            android:textSize="42sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/splash_slogan"
+            android:textColor="@color/primary_80"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+    <!-- Loading Indicator (3 Dots) -->
+    <LinearLayout
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="96dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/dot_bg_20" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/dot_bg_40" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/dot_bg_20" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
