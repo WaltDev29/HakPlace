@@ -21,8 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.ApiService;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import kr.ac.waltdev29.hakplace.api.models.DailyMeals;
 import kr.ac.waltdev29.hakplace.api.models.ReviewList;
 import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
@@ -62,7 +64,8 @@ public class ReviewListActivity extends AppCompatActivity {
         // Intent handle
         if (getIntent().hasExtra("meal_id")) {
             currentMealId = getIntent().getIntExtra("meal_id", -1);
-            if (currentMealId == -1) currentMealId = null;
+            if (currentMealId == -1)
+                currentMealId = null;
         }
 
         updateDateButton();
@@ -82,23 +85,41 @@ public class ReviewListActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: currentSort = "newest"; break;
-                    case 1: currentSort = "rating_desc"; break;
-                    case 2: currentSort = "rating_asc"; break;
+                    case 0:
+                        currentSort = "newest";
+                        break;
+                    case 1:
+                        currentSort = "rating_desc";
+                        break;
+                    case 2:
+                        currentSort = "rating_asc";
+                        break;
                 }
                 updateDisplayList();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         btnDatePicker.setOnClickListener(v -> {
-            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                selectedDate.set(year, month, dayOfMonth);
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("날짜 선택")
+                    .setSelection(selectedDate.getTimeInMillis())
+                    .setTheme(R.style.CustomMaterialCalendar)
+                    .build();
+
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis(selection);
+                selectedDate.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
                 updateDateButton();
                 fetchMealsOfDate();
-            }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
+            });
+
+            datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
         });
 
         chipGroupMealType.setOnCheckedStateChangeListener((group, checkedIds) -> {
@@ -120,22 +141,26 @@ public class ReviewListActivity extends AppCompatActivity {
             public void onResponse(Call<DailyMeals> call, Response<DailyMeals> response) {
                 if (response.isSuccessful()) {
                     mealsOfDate = response.body();
-                    
+
                     // Update adapter mapping
                     if (mealsOfDate != null) {
                         Map<Integer, String> mapping = new HashMap<>();
-                        if (mealsOfDate.breakfast != null) mapping.put(mealsOfDate.breakfast.meal_id, "조식");
-                        if (mealsOfDate.lunch != null) mapping.put(mealsOfDate.lunch.meal_id, "중식");
-                        if (mealsOfDate.dinner != null) mapping.put(mealsOfDate.dinner.meal_id, "석식");
+                        if (mealsOfDate.breakfast != null)
+                            mapping.put(mealsOfDate.breakfast.meal_id, "조식");
+                        if (mealsOfDate.lunch != null)
+                            mapping.put(mealsOfDate.lunch.meal_id, "중식");
+                        if (mealsOfDate.dinner != null)
+                            mapping.put(mealsOfDate.dinner.meal_id, "석식");
                         adapter.setMealTypeMapping(mapping);
                     }
-                    
+
                     updateCurrentMealIdByChip();
                 }
             }
 
             @Override
-            public void onFailure(Call<DailyMeals> call, Throwable t) {}
+            public void onFailure(Call<DailyMeals> call, Throwable t) {
+            }
         });
     }
 
@@ -150,7 +175,7 @@ public class ReviewListActivity extends AppCompatActivity {
         } else if (checkedId == R.id.chipDinner) {
             currentMealId = (mealsOfDate != null && mealsOfDate.dinner != null) ? mealsOfDate.dinner.meal_id : -1;
         }
-        
+
         if (currentMealId != null && currentMealId == -1) {
             Toast.makeText(this, "해당 식단 정보가 없습니다.", Toast.LENGTH_SHORT).show();
             allReviewsFromApi = new ArrayList<>();
@@ -186,10 +211,13 @@ public class ReviewListActivity extends AppCompatActivity {
         // 1. Filtering (if "All" selected for specific date)
         if (currentMealId == null && mealsOfDate != null) {
             List<Integer> validMealIds = new ArrayList<>();
-            if (mealsOfDate.breakfast != null) validMealIds.add(mealsOfDate.breakfast.meal_id);
-            if (mealsOfDate.lunch != null) validMealIds.add(mealsOfDate.lunch.meal_id);
-            if (mealsOfDate.dinner != null) validMealIds.add(mealsOfDate.dinner.meal_id);
-            
+            if (mealsOfDate.breakfast != null)
+                validMealIds.add(mealsOfDate.breakfast.meal_id);
+            if (mealsOfDate.lunch != null)
+                validMealIds.add(mealsOfDate.lunch.meal_id);
+            if (mealsOfDate.dinner != null)
+                validMealIds.add(mealsOfDate.dinner.meal_id);
+
             List<ReviewResponse> filtered = new ArrayList<>();
             for (ReviewResponse r : displayList) {
                 if (validMealIds.contains(r.meal_id)) {

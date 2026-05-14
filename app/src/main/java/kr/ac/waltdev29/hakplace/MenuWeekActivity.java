@@ -32,7 +32,7 @@ public class MenuWeekActivity extends AppCompatActivity {
     private TextView[] dayLabels = new TextView[5];
     private TextView[] dayDates = new TextView[5];
     private View cardBreakfast, cardLunch, cardDinner;
-    
+
     private ApiService apiService;
     private List<DailyMeals> weekMeals = new ArrayList<>();
     private int selectedDayIndex = -1;
@@ -51,7 +51,8 @@ public class MenuWeekActivity extends AppCompatActivity {
 
         cardBreakfast.setOnClickListener(v -> {
             if (selectedDayIndex >= 0 && selectedDayIndex < weekMeals.size()) {
-                showMealDetailPopup("조식", weekMeals.get(selectedDayIndex).breakfast, weekMeals.get(selectedDayIndex).date);
+                showMealDetailPopup("조식", weekMeals.get(selectedDayIndex).breakfast,
+                        weekMeals.get(selectedDayIndex).date);
             }
         });
         cardLunch.setOnClickListener(v -> {
@@ -68,7 +69,7 @@ public class MenuWeekActivity extends AppCompatActivity {
 
     private void initViews() {
         tvWeekRange = findViewById(R.id.tvWeekRange);
-        
+
         dayButtons[0] = findViewById(R.id.btnMon);
         dayButtons[1] = findViewById(R.id.btnTue);
         dayButtons[2] = findViewById(R.id.btnWed);
@@ -153,16 +154,17 @@ public class MenuWeekActivity extends AppCompatActivity {
     }
 
     private void updateDateSelector() {
-        if (weekMeals.isEmpty()) return;
+        if (weekMeals.isEmpty())
+            return;
 
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat outputFormat = new SimpleDateFormat("M/d", Locale.getDefault());
-            
+
             // Set Week Range Header
             Date firstDate = inputFormat.parse(weekMeals.get(0).date);
             Date lastDate = inputFormat.parse(weekMeals.get(weekMeals.size() - 1).date);
-            
+
             SimpleDateFormat rangeFormat = new SimpleDateFormat("M월 d일", Locale.KOREAN);
             tvWeekRange.setText(rangeFormat.format(firstDate) + " ~ " + rangeFormat.format(lastDate));
 
@@ -178,14 +180,14 @@ public class MenuWeekActivity extends AppCompatActivity {
     private void autoSelectCurrentDay() {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         int todayIndex = 0; // Default to Monday
-        
+
         for (int i = 0; i < weekMeals.size(); i++) {
             if (weekMeals.get(i).date.equals(today)) {
                 todayIndex = i;
                 break;
             }
         }
-        
+
         // If today is weekend, index might be off, but the API usually returns Mon-Fri.
         // If we can't find today, we check if today is Saturday or Sunday.
         Calendar cal = Calendar.getInstance();
@@ -198,11 +200,13 @@ public class MenuWeekActivity extends AppCompatActivity {
     }
 
     private void selectDay(int index) {
-        if (index < 0 || index >= weekMeals.size()) return;
-        if (selectedDayIndex == index) return;
+        if (index < 0 || index >= weekMeals.size())
+            return;
+        if (selectedDayIndex == index)
+            return;
 
         selectedDayIndex = index;
-        
+
         // Update Buttons UI
         for (int i = 0; i < 5; i++) {
             if (i == index) {
@@ -274,7 +278,8 @@ public class MenuWeekActivity extends AppCompatActivity {
             return;
         }
 
-        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(
+                this);
         View view = getLayoutInflater().inflate(R.layout.dialog_meal_detail, null);
         dialog.setContentView(view);
 
@@ -299,7 +304,8 @@ public class MenuWeekActivity extends AppCompatActivity {
         tvTitle.setText(mealType + " " + dateStr);
 
         tvRating.setText(String.format(Locale.getDefault(), "%.1f", meal.avg_rating));
-        tvReviewCount.setText(String.format(Locale.getDefault(), getString(R.string.review_count_format), meal.review_count));
+        tvReviewCount.setText(
+                String.format(Locale.getDefault(), getString(R.string.review_count_format), meal.review_count));
 
         // Update Stars
         for (int i = 0; i < 5; i++) {

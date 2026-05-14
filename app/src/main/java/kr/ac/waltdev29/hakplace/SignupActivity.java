@@ -57,6 +57,7 @@ public class SignupActivity extends AppCompatActivity {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("생년월일 선택")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setTheme(R.style.CustomMaterialCalendar)
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {

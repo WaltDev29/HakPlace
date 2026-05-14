@@ -12,4 +12,18 @@
 
 
     <style name="Theme.HakPlace" parent="Base.Theme.HakPlace" />
+
+    <!-- 구글 MaterialDatePicker용 테마 -->
+    <style name="CustomMaterialCalendar" parent="ThemeOverlay.Material3.MaterialCalendar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="colorSurfaceContainerHigh">@color/white</item>
+    </style>
+
+    <!-- 기본 DatePickerDialog용 초록색 테마 -->
+    <style name="GreenDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/primary</item>
+    </style>
 </resources>

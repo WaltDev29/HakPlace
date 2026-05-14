@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:text="중식"
                 android:textColor="@color/on_surface"
-                android:textSize="14sp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <View
