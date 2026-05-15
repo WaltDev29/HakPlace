@@ -74,7 +74,7 @@
                     android:layout_weight="1"
                     android:text="주차별"
                     android:textColor="@color/primary"
-                    app:cornerRadius="24dp"
+                    app:cornerRadius="12dp"
                     app:strokeColor="@color/outline_variant" />
 
                 <com.google.android.material.button.MaterialButton
@@ -85,7 +85,7 @@
                     android:layout_weight="1"
                     android:text="월별"
                     android:textColor="@color/on_surface_variant"
-                    app:cornerRadius="24dp"
+                    app:cornerRadius="12dp"
                     app:strokeColor="@color/outline_variant" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -317,7 +317,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="🛠 개선 포인트"
+                        android:text="📌 키 포인트"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
                         android:textStyle="bold" />

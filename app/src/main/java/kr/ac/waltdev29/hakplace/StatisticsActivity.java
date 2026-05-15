@@ -32,8 +32,10 @@ import java.util.Locale;
 
 import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.ApiService;
+import kr.ac.waltdev29.hakplace.api.models.DailyMeals;
 import kr.ac.waltdev29.hakplace.api.models.FoodRatingList;
 import kr.ac.waltdev29.hakplace.api.models.FoodRatingResponse;
+import kr.ac.waltdev29.hakplace.api.models.MealSchema;
 import kr.ac.waltdev29.hakplace.api.models.MonthlyGraphData;
 import kr.ac.waltdev29.hakplace.api.models.StatisticList;
 import kr.ac.waltdev29.hakplace.api.models.StatisticResponse;
@@ -55,6 +57,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private boolean isWeekly = true;
     private Calendar currentCalendar = Calendar.getInstance();
+    private List<WeeklyGraphData> currentWeeklyData;
+    private List<MonthlyGraphData> currentMonthlyData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +170,8 @@ public class StatisticsActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<WeeklyGraphData>> call, Response<List<WeeklyGraphData>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        updateWeeklyChart(response.body());
+                        currentWeeklyData = response.body();
+                        updateWeeklyChart(currentWeeklyData);
                     }
                 }
 
@@ -181,7 +186,8 @@ public class StatisticsActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<MonthlyGraphData>> call, Response<List<MonthlyGraphData>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        updateMonthlyChart(response.body());
+                        currentMonthlyData = response.body();
+                        updateMonthlyChart(currentMonthlyData);
                     }
                 }
 
@@ -367,52 +373,91 @@ public class StatisticsActivity extends AppCompatActivity {
         tvTrendAnalysis.setText(comment.trend_analysis != null ? comment.trend_analysis : "-");
         
         String bestMealStr = "-";
-        if (comment.best_meal != null) {
-            if (comment.best_meal instanceof String) {
-                bestMealStr = (String) comment.best_meal;
-            } else {
-                try {
-                    String json = new Gson().toJson(comment.best_meal);
-                    com.google.gson.internal.LinkedTreeMap<String, Object> map = 
-                        new Gson().fromJson(json, com.google.gson.internal.LinkedTreeMap.class);
-                    
-                    String day = (String) map.get("day");
-                    String type = (String) map.get("type");
-                    List<String> foods = (List<String>) map.get("foods");
-                    
-                    // 요일 번역
-                    if (day != null) {
-                        switch (day.toLowerCase()) {
-                            case "mon": day = "월"; break;
-                            case "tue": day = "화"; break;
-                            case "wed": day = "수"; break;
-                            case "thu": day = "목"; break;
-                            case "fri": day = "금"; break;
-                            case "sat": day = "토"; break;
-                            case "sun": day = "일"; break;
-                        }
-                    }
-
-                    StringBuilder sb = new StringBuilder();
-                    if (day != null) sb.append(day).append("요일 ");
-                    if (type != null) sb.append(type);
-                    if (foods != null && !foods.isEmpty()) {
-                        sb.append(" (");
-                        for (int i = 0; i < foods.size(); i++) {
-                            sb.append(foods.get(i));
-                            if (i < foods.size() - 1) sb.append(", ");
-                        }
-                        sb.append(")");
-                    }
-                    bestMealStr = sb.toString().trim();
-                    if (bestMealStr.isEmpty()) bestMealStr = comment.best_meal.toString();
-                } catch (Exception e) {
-                    bestMealStr = comment.best_meal.toString();
+        // Calculate best meal from graph data
+        if (isWeekly && currentWeeklyData != null && !currentWeeklyData.isEmpty()) {
+            WeeklyGraphData bestDay = null;
+            double maxRating = -1;
+            for (WeeklyGraphData d : currentWeeklyData) {
+                if (d.avg_rating != null && d.avg_rating > maxRating) {
+                    maxRating = d.avg_rating;
+                    bestDay = d;
                 }
+            }
+            if (bestDay != null && maxRating > 0) {
+                fetchAndDisplayBestMealDetails(bestDay.date, bestDay.label, maxRating);
+                return; // tvBestMeal will be updated in callback
+            }
+        } else if (!isWeekly && currentMonthlyData != null && !currentMonthlyData.isEmpty()) {
+            MonthlyGraphData bestWeek = null;
+            double maxRating = -1;
+            for (MonthlyGraphData d : currentMonthlyData) {
+                if (d.avg_rating != null && d.avg_rating > maxRating) {
+                    maxRating = d.avg_rating;
+                    bestWeek = d;
+                }
+            }
+            if (bestWeek != null && maxRating > 0) {
+                bestMealStr = bestWeek.label + " (" + String.format(Locale.getDefault(), "%.1f", maxRating) + "점)";
             }
         }
         tvBestMeal.setText(bestMealStr);
-        tvImprovementPoints.setText(comment.improvement_points != null ? comment.improvement_points : "-");
+
+        tvImprovementPoints.setText(comment.key_feedback != null ? comment.key_feedback : "-");
+    }
+
+    private void fetchAndDisplayBestMealDetails(String date, String label, double dayAvg) {
+        tvBestMeal.setText(label + " (" + String.format(Locale.getDefault(), "%.1f", dayAvg) + "점)");
+
+        apiService.getToday(date).enqueue(new Callback<DailyMeals>() {
+            @Override
+            public void onResponse(Call<DailyMeals> call, Response<DailyMeals> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    DailyMeals dm = response.body();
+                    MealSchema bestMeal = null;
+                    double maxRating = -1;
+
+                    // Find the best meal among B/L/D of that day
+                    if (dm.breakfast != null && dm.breakfast.avg_rating > maxRating) {
+                        maxRating = dm.breakfast.avg_rating;
+                        bestMeal = dm.breakfast;
+                    }
+                    if (dm.lunch != null && dm.lunch.avg_rating > maxRating) {
+                        maxRating = dm.lunch.avg_rating;
+                        bestMeal = dm.lunch;
+                    }
+                    if (dm.dinner != null && dm.dinner.avg_rating > maxRating) {
+                        maxRating = dm.dinner.avg_rating;
+                        bestMeal = dm.dinner;
+                    }
+
+                    if (bestMeal != null) {
+                        try {
+                            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            SimpleDateFormat out = new SimpleDateFormat("M/d (E)", Locale.KOREA);
+                            String dateLabel = out.format(in.parse(date));
+
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(dateLabel).append(" ").append(bestMeal.meal_type)
+                                    .append(" [").append(String.format(Locale.getDefault(), "%.1f", bestMeal.avg_rating))
+                                    .append("점]\n");
+
+                            if (bestMeal.foods != null) {
+                                for (int i = 0; i < bestMeal.foods.size(); i++) {
+                                    sb.append(bestMeal.foods.get(i));
+                                    if (i < bestMeal.foods.size() - 1) sb.append(", ");
+                                }
+                            }
+                            tvBestMeal.setText(sb.toString());
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DailyMeals> call, Throwable t) {
+            }
+        });
     }
 
     private void resetAiComment() {
