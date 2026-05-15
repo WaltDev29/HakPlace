@@ -9,18 +9,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     private static Retrofit retrofit;
 
+    public static String getBaseUrl() {
+        String baseUrl = "https://api.example.com/";
+        try {
+            if (BuildConfig.API_URL != null && !BuildConfig.API_URL.isEmpty()) {
+                baseUrl = BuildConfig.API_URL;
+                if (!baseUrl.endsWith("/")) {
+                    baseUrl += "/";
+                }
+            }
+        } catch (Throwable ignored) {}
+        return baseUrl;
+    }
+
     public static Retrofit getClient() {
         if (retrofit == null) {
-            String baseUrl = "https://api.example.com/";
-            try {
-                if (BuildConfig.API_URL != null && !BuildConfig.API_URL.isEmpty()) {
-                    baseUrl = BuildConfig.API_URL;
-                    if (!baseUrl.endsWith("/")) {
-                        baseUrl += "/";
-                    }
-                }
-            } catch (Throwable ignored) {}
-
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
                         Request req = chain.request().newBuilder()
@@ -31,7 +34,7 @@ public class ApiClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(getBaseUrl())
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

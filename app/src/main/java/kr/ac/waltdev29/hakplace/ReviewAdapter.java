@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
@@ -56,10 +57,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
         if (review.photo_url != null && !review.photo_url.isEmpty()) {
             holder.ivReviewPhoto.setVisibility(View.VISIBLE);
-            // Assuming photo_url is a relative path or full URL
-            // If it's relative, you might need to prepend the base URL
+            
+            String fullUrl = review.photo_url;
+            if (!fullUrl.startsWith("http")) {
+                String baseUrl = ApiClient.getBaseUrl();
+                // Remove leading slash if exists to avoid double slash (base URL already ends with /)
+                String path = fullUrl.startsWith("/") ? fullUrl.substring(1) : fullUrl;
+                fullUrl = baseUrl + path;
+            }
+
             Glide.with(holder.itemView.getContext())
-                    .load(review.photo_url)
+                    .load(fullUrl)
                     .into(holder.ivReviewPhoto);
         } else {
             holder.ivReviewPhoto.setVisibility(View.GONE);
