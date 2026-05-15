@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,12 @@ public class ReviewWriteActivity extends AppCompatActivity {
     
     private TextView tvMealInfo, tvRatingValue, tvCharCount;
     private EditText etReviewComment;
-    private LinearLayout llStars;
+    private RatingBar ratingBar;
     private View btnSubmit, btnClose;
     private View btnUploadPhoto;
     private ImageView ivSelectedPhoto, icCamera;
     
-    private int currentRating = 0;
+    private float currentRating = 0;
     private String photoBase64 = null;
     private ApiService apiService;
     
@@ -84,7 +85,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         tvRatingValue = findViewById(R.id.tvRatingValue);
         tvCharCount = findViewById(R.id.tvCharCount);
         etReviewComment = findViewById(R.id.etReviewComment);
-        llStars = findViewById(R.id.llStars);
+        ratingBar = findViewById(R.id.ratingBar);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnClose = findViewById(R.id.btnClose);
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
@@ -103,11 +104,12 @@ public class ReviewWriteActivity extends AppCompatActivity {
                     .build());
         });
 
-        // Star click listeners
-        for (int i = 0; i < 5; i++) {
-            final int rating = i + 1;
-            llStars.getChildAt(i).setOnClickListener(v -> setRating(rating));
-        }
+        // Rating bar change listener
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (fromUser) {
+                setRating(rating);
+            }
+        });
 
         // Character count listener
         etReviewComment.addTextChangedListener(new TextWatcher() {
@@ -138,17 +140,9 @@ public class ReviewWriteActivity extends AppCompatActivity {
         });
     }
 
-    private void setRating(int rating) {
+    private void setRating(float rating) {
         currentRating = rating;
-        for (int i = 0; i < 5; i++) {
-            ImageView star = (ImageView) llStars.getChildAt(i);
-            if (i < rating) {
-                star.setImageResource(R.drawable.ic_star);
-            } else {
-                star.setImageResource(R.drawable.ic_star_border);
-            }
-        }
-        tvRatingValue.setText(String.format(Locale.getDefault(), "%.1f / 5.0", (double) rating));
+        tvRatingValue.setText(String.format(Locale.getDefault(), "%.1f / 5.0", rating));
     }
 
     private void submitReview() {
