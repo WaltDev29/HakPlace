@@ -48,7 +48,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
     private View btnUploadPhoto;
     private ImageView ivSelectedPhoto, icCamera;
     
-    private float currentRating = 0;
+    private float currentRating = 1.0f;
     private String photoBase64 = null;
     private ApiService apiService;
     
@@ -93,6 +93,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         icCamera = findViewById(R.id.icCamera);
 
         tvMealInfo.setText(mealType + " " + date);
+        tvRatingValue.setText("1.0 / 5.0");
     }
 
     private void setupListeners() {
@@ -105,9 +106,14 @@ public class ReviewWriteActivity extends AppCompatActivity {
         });
 
         // Rating bar change listener
-        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+        ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
             if (fromUser) {
-                setRating(rating);
+                if (rating < 1.0f) {
+                    bar.setRating(1.0f);
+                    setRating(1.0f);
+                } else {
+                    setRating(rating);
+                }
             }
         });
 
@@ -146,7 +152,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
     }
 
     private void submitReview() {
-        if (currentRating == 0) {
+        if (currentRating < 1.0f) {
             Toast.makeText(this, getString(R.string.msg_select_rating), Toast.LENGTH_SHORT).show();
             return;
         }
