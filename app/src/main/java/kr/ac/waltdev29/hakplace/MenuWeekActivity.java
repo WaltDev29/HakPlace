@@ -125,6 +125,10 @@ public class MenuWeekActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuTodayActivity.class));
                 finish();
                 return true;
+            } else if (id == R.id.nav_stats) {
+                startActivity(new Intent(this, StatisticsActivity.class));
+                finish();
+                return true;
             } else if (id == R.id.nav_review) {
                 startActivity(new Intent(this, ReviewListActivity.class));
                 finish();
@@ -412,6 +416,9 @@ public class MenuWeekActivity extends AppCompatActivity {
         btnView.setOnClickListener(v -> {
             Intent intent = new Intent(this, ReviewListActivity.class);
             intent.putExtra("meal_id", meal.meal_id);
+            intent.putExtra("start_date", date);
+            intent.putExtra("end_date", date);
+            intent.putExtra("meal_type", mealType);
             startActivity(intent);
             dialog.dismiss();
         });

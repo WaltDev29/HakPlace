@@ -1,0 +1,9 @@
+# local.properties 예시 파일
+# 이 파일을 복사하여 local.properties를 만들고 본인의 환경에 맞게 실제 값을 입력하세요.
+
+# Android SDK 경로 (일반적으로 Android Studio가 자동으로 생성해줍니다.)
+# sdk.dir=C\:\\Users\\YourName\\AppData\\Local\\Android\\Sdk
+
+# API 서버 주소 설정
+# - 마지막에 반드시 슬래시(/)를 포함해야 합니다.
+api.url=https://your-api-domain.com/

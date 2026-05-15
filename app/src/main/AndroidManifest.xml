@@ -55,6 +55,15 @@
         <activity
             android:name=".MyPageActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".StatisticsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ImageDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
             
     </application>
 

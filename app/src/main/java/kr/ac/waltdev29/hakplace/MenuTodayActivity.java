@@ -1,5 +1,6 @@
 package kr.ac.waltdev29.hakplace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,9 +49,11 @@ public class MenuTodayActivity extends AppCompatActivity {
         fetchTodayMeals();
         fetchUserInfo();
 
-        cardBreakfast.setOnClickListener(v -> showMealDetailPopup("조식", currentMeals != null ? currentMeals.breakfast : null));
+        cardBreakfast.setOnClickListener(
+                v -> showMealDetailPopup("조식", currentMeals != null ? currentMeals.breakfast : null));
         cardLunch.setOnClickListener(v -> showMealDetailPopup("중식", currentMeals != null ? currentMeals.lunch : null));
-        cardDinner.setOnClickListener(v -> showMealDetailPopup("석식", currentMeals != null ? currentMeals.dinner : null));
+        cardDinner
+                .setOnClickListener(v -> showMealDetailPopup("석식", currentMeals != null ? currentMeals.dinner : null));
     }
 
     private void setupMealCards() {
@@ -78,6 +81,10 @@ public class MenuTodayActivity extends AppCompatActivity {
                 startActivity(new android.content.Intent(this, MenuWeekActivity.class));
                 finish();
                 return true;
+            } else if (id == R.id.nav_stats) {
+                startActivity(new Intent(this, StatisticsActivity.class));
+                finish();
+                return true;
             } else if (id == R.id.nav_review) {
                 startActivity(new android.content.Intent(this, ReviewListActivity.class));
                 finish();
@@ -87,7 +94,7 @@ public class MenuTodayActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (id == R.id.nav_stats) {
-                Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
                 return false;
             }
             return false;
@@ -107,14 +114,14 @@ public class MenuTodayActivity extends AppCompatActivity {
                     currentMeals = response.body();
                     displayMeals(currentMeals);
                 } else {
-                    Toast.makeText(MenuTodayActivity.this, "식단 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuTodayActivity.this, getString(R.string.error_meal_load), Toast.LENGTH_SHORT).show();
                     setEmptyState();
                 }
             }
 
             @Override
             public void onFailure(Call<DailyMeals> call, Throwable t) {
-                Toast.makeText(MenuTodayActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuTodayActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
                 setEmptyState();
             }
 
@@ -124,11 +131,13 @@ public class MenuTodayActivity extends AppCompatActivity {
     private void fetchUserInfo() {
         android.content.SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
         String token = prefs.getString("access_token", null);
-        if (token == null) return;
+        if (token == null)
+            return;
 
         apiService.getMe("Bearer " + token).enqueue(new Callback<kr.ac.waltdev29.hakplace.api.models.UserInfo>() {
             @Override
-            public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call, Response<kr.ac.waltdev29.hakplace.api.models.UserInfo> response) {
+            public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call,
+                    Response<kr.ac.waltdev29.hakplace.api.models.UserInfo> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     android.content.SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("student_id", response.body().student_id);
@@ -208,7 +217,8 @@ public class MenuTodayActivity extends AppCompatActivity {
             return;
         }
 
-        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(
+                this);
         View view = getLayoutInflater().inflate(R.layout.dialog_meal_detail, null);
         dialog.setContentView(view);
 
@@ -233,7 +243,8 @@ public class MenuTodayActivity extends AppCompatActivity {
         tvTitle.setText(mealType + " " + dateStr);
 
         tvRating.setText(String.format(Locale.getDefault(), "%.1f", meal.avg_rating));
-        tvReviewCount.setText(String.format(Locale.getDefault(), getString(R.string.review_count_format), meal.review_count));
+        tvReviewCount.setText(
+                String.format(Locale.getDefault(), getString(R.string.review_count_format), meal.review_count));
 
         // Update Stars
         for (int i = 0; i < 5; i++) {
@@ -249,21 +260,24 @@ public class MenuTodayActivity extends AppCompatActivity {
         btnWrite.setOnClickListener(v -> {
             if (currentMeals == null || !isReviewable(mealType, currentMeals.date)) {
                 String startTime = "";
-                if (mealType.equals("조식")) startTime = "07:30";
-                else if (mealType.equals("중식")) startTime = "11:30";
-                else if (mealType.equals("석식")) startTime = "17:30";
+                if (mealType.equals("조식"))
+                    startTime = "07:30";
+                else if (mealType.equals("중식"))
+                    startTime = "11:30";
+                else if (mealType.equals("석식"))
+                    startTime = "17:30";
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
                 sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
                 String today = sdf.format(new Date());
-                
-                String title = "리뷰 작성 제한";
+
+                String title = getString(R.string.review_restricted_title);
                 String msg;
                 if (currentMeals == null || !today.equals(currentMeals.date)) {
-                    msg = "당일 식단만 리뷰를 작성할 수 있습니다.";
+                    msg = getString(R.string.review_restricted_today_msg);
                 } else {
-                    title = mealType + " 리뷰 시간 안내";
-                    msg = mealType + " 리뷰는 " + startTime + "부터 작성 가능합니다.";
+                    title = String.format(Locale.getDefault(), getString(R.string.review_time_guide_title), mealType);
+                    msg = String.format(Locale.getDefault(), getString(R.string.review_time_guide_msg), mealType, startTime);
                 }
                 DialogHelper.showNotificationDialog(this, title, msg, null);
                 return;
@@ -276,43 +290,53 @@ public class MenuTodayActivity extends AppCompatActivity {
             if (studentId == null) {
                 // 정보가 없으면 즉시 동기화 시도 후 안내
                 fetchUserInfo();
-                DialogHelper.showNotificationDialog(this, "정보 확인 중", "사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.", null);
+                DialogHelper.showNotificationDialog(this, getString(R.string.checking_info), getString(R.string.syncing_user_info), null);
                 return;
             }
 
             btnWrite.setEnabled(false); // 중복 체크 중 버튼 비활성화
-            apiService.listReviews(meal.meal_id, studentId, null, null, null).enqueue(new retrofit2.Callback<kr.ac.waltdev29.hakplace.api.models.ReviewList>() {
-                @Override
-                public void onResponse(retrofit2.Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call, retrofit2.Response<kr.ac.waltdev29.hakplace.api.models.ReviewList> response) {
-                    btnWrite.setEnabled(true);
-                    if (response.isSuccessful() && response.body() != null) {
-                        if (response.body().reviews != null && !response.body().reviews.isEmpty()) {
-                            // 이미 리뷰가 존재하는 경우
-                            DialogHelper.showNotificationDialog(MenuTodayActivity.this, "중복 작성 제한", "이미 이 식단에 리뷰를 작성하셨습니다.", null);
-                        } else {
-                            // 리뷰가 없는 경우 이동
-                            android.content.Intent intent = new android.content.Intent(MenuTodayActivity.this, ReviewWriteActivity.class);
-                            intent.putExtra("meal_id", meal.meal_id);
-                            intent.putExtra("meal_type", mealType);
-                            intent.putExtra("date", dateStr);
-                            startActivity(intent);
-                            dialog.dismiss();
+            apiService.listReviews(meal.meal_id, studentId, null, null, null)
+                    .enqueue(new retrofit2.Callback<kr.ac.waltdev29.hakplace.api.models.ReviewList>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call,
+                                retrofit2.Response<kr.ac.waltdev29.hakplace.api.models.ReviewList> response) {
+                            btnWrite.setEnabled(true);
+                            if (response.isSuccessful() && response.body() != null) {
+                                if (response.body().reviews != null && !response.body().reviews.isEmpty()) {
+                                    // 이미 리뷰가 존재하는 경우
+                                    DialogHelper.showNotificationDialog(MenuTodayActivity.this, getString(R.string.duplicate_review_title),
+                                            getString(R.string.duplicate_review_msg), null);
+                                } else {
+                                    // 리뷰가 없는 경우 이동
+                                    android.content.Intent intent = new android.content.Intent(MenuTodayActivity.this,
+                                            ReviewWriteActivity.class);
+                                    intent.putExtra("meal_id", meal.meal_id);
+                                    intent.putExtra("meal_type", mealType);
+                                    intent.putExtra("date", dateStr);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            } else {
+                                Toast.makeText(MenuTodayActivity.this, getString(R.string.status_check_failed), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        Toast.makeText(MenuTodayActivity.this, "상태 확인 실패", Toast.LENGTH_SHORT).show();
-                    }
-                }
 
-                @Override
-                public void onFailure(retrofit2.Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call, Throwable t) {
-                    btnWrite.setEnabled(true);
-                    Toast.makeText(MenuTodayActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onFailure(retrofit2.Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call,
+                                Throwable t) {
+                            btnWrite.setEnabled(true);
+                            Toast.makeText(MenuTodayActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
         btnView.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(this, ReviewListActivity.class);
+            Intent intent = new Intent(this, ReviewListActivity.class);
             intent.putExtra("meal_id", meal.meal_id);
+            if (currentMeals != null) {
+                intent.putExtra("start_date", currentMeals.date);
+                intent.putExtra("end_date", currentMeals.date);
+            }
+            intent.putExtra("meal_type", mealType);
             startActivity(intent);
             dialog.dismiss();
         });
@@ -324,7 +348,7 @@ public class MenuTodayActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         String today = sdf.format(new Date());
-        
+
         if (!today.equals(mealDate)) {
             return false;
         }
@@ -345,7 +369,7 @@ public class MenuTodayActivity extends AppCompatActivity {
     }
 
     private void setEmptyState() {
-        tvDateHeader.setText("정보 없음");
+        tvDateHeader.setText(getString(R.string.info_not_found));
         updateMealInfo(cardBreakfast, null);
         updateMealInfo(cardLunch, null);
         updateMealInfo(cardDinner, null);

@@ -24,12 +24,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val env = Properties()
-        val envFile = project.rootProject.file(".env")
-        if (envFile.exists()) {
-            env.load(envFile.inputStream())
+        val properties = Properties()
+        val propertiesFile = project.rootProject.file("local.properties")
+        if (propertiesFile.exists()) {
+            properties.load(propertiesFile.inputStream())
         }
-        buildConfigField("String", "API_URL", "\"${env.getProperty("API_URL") ?: ""}\"")
+        buildConfigField("String", "API_URL", "\"${properties.getProperty("api.url") ?: ""}\"")
     }
 
     buildTypes {
@@ -67,7 +67,7 @@ dependencies {
     annotationProcessor(libs.glide.compiler)
     
     // Utils
-    implementation(libs.dotenv)
+    implementation(libs.mpandroidchart)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

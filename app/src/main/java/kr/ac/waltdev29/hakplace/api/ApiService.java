@@ -10,6 +10,10 @@ import kr.ac.waltdev29.hakplace.api.models.Token;
 import kr.ac.waltdev29.hakplace.api.models.UserInfo;
 import kr.ac.waltdev29.hakplace.api.models.UserSignup;
 import kr.ac.waltdev29.hakplace.api.models.WeeklyMeals;
+import kr.ac.waltdev29.hakplace.api.models.WeeklyGraphData;
+import kr.ac.waltdev29.hakplace.api.models.MonthlyGraphData;
+import kr.ac.waltdev29.hakplace.api.models.FoodRatingList;
+import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,25 +28,25 @@ import retrofit2.http.Header;
 public interface ApiService {
 
     @FormUrlEncoded
-    @POST("/auth/login")
+    @POST("auth/login")
     Call<Token> login(@Field("username") String username, @Field("password") String password);
 
-    @POST("/auth/signup")
+    @POST("auth/signup")
     Call<ResponseBody> signup(@Body UserSignup signup);
 
-    @GET("/users/me")
+    @GET("users/me")
     Call<UserInfo> getMe(@Header("Authorization") String bearer);
 
-    @GET("/meals/today")
+    @GET("meals/today")
     Call<DailyMeals> getToday(@Query("target_date") String targetDate);
 
-    @GET("/meals/weekly")
+    @GET("meals/weekly")
     Call<WeeklyMeals> getWeekly();
 
-    @POST("/reviews/")
+    @POST("reviews/")
     Call<ReviewResponse> createReview(@Header("Authorization") String bearer, @Body ReviewCreate review);
 
-    @GET("/reviews/")
+    @GET("reviews/")
     Call<ReviewList> listReviews(
             @Query("meal_id") Integer mealId,
             @Query("student_id") String studentId,
@@ -51,9 +55,18 @@ public interface ApiService {
             @Query("end_date") String endDate
     );
 
-    @GET("/statistics/")
+    @GET("statistics/")
     Call<StatisticList> getStatistics(@Query("period_type") String periodType);
 
-    @GET("/statistics/{stat_id}")
+    @GET("statistics/weekly")
+    Call<List<WeeklyGraphData>> getWeeklyGraphData(@Query("date") String date);
+
+    @GET("statistics/monthly")
+    Call<List<MonthlyGraphData>> getMonthlyGraphData(@Query("month") String month);
+
+    @GET("statistics/foods")
+    Call<FoodRatingList> getFoodRatings();
+
+    @GET("statistics/{stat_id}")
     Call<StatisticResponse> getStatistic(@Path("stat_id") int statId);
 }

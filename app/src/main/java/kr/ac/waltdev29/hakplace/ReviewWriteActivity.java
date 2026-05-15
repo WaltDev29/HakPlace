@@ -1,19 +1,28 @@
 package kr.ac.waltdev29.hakplace;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Locale;
 
 import kr.ac.waltdev29.hakplace.api.ApiClient;
@@ -21,6 +30,7 @@ import kr.ac.waltdev29.hakplace.api.ApiService;
 import kr.ac.waltdev29.hakplace.api.ErrorUtils;
 import kr.ac.waltdev29.hakplace.api.models.ReviewCreate;
 import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
+import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,11 +43,21 @@ public class ReviewWriteActivity extends AppCompatActivity {
     
     private TextView tvMealInfo, tvRatingValue, tvCharCount;
     private EditText etReviewComment;
-    private LinearLayout llStars;
+    private RatingBar ratingBar;
     private View btnSubmit, btnClose;
+    private View btnUploadPhoto;
+    private ImageView ivSelectedPhoto, icCamera;
     
-    private int currentRating = 0;
+    private float currentRating = 1.0f;
+    private String photoBase64 = null;
     private ApiService apiService;
+    
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                if (uri != null) {
+                    processSelectedImage(uri);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +85,37 @@ public class ReviewWriteActivity extends AppCompatActivity {
         tvRatingValue = findViewById(R.id.tvRatingValue);
         tvCharCount = findViewById(R.id.tvCharCount);
         etReviewComment = findViewById(R.id.etReviewComment);
-        llStars = findViewById(R.id.llStars);
+        ratingBar = findViewById(R.id.ratingBar);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnClose = findViewById(R.id.btnClose);
+        btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
+        ivSelectedPhoto = findViewById(R.id.ivSelectedPhoto);
+        icCamera = findViewById(R.id.icCamera);
 
         tvMealInfo.setText(mealType + " " + date);
+        tvRatingValue.setText("1.0 / 5.0");
     }
 
     private void setupListeners() {
         btnClose.setOnClickListener(v -> finish());
+        
+        btnUploadPhoto.setOnClickListener(v -> {
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
+        });
 
-        // Star click listeners
-        for (int i = 0; i < 5; i++) {
-            final int rating = i + 1;
-            llStars.getChildAt(i).setOnClickListener(v -> setRating(rating));
-        }
+        // Rating bar change listener
+        ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
+            if (fromUser) {
+                if (rating < 1.0f) {
+                    bar.setRating(1.0f);
+                    setRating(1.0f);
+                } else {
+                    setRating(rating);
+                }
+            }
+        });
 
         // Character count listener
         etReviewComment.addTextChangedListener(new TextWatcher() {
@@ -96,7 +132,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         });
 
         btnSubmit.setOnClickListener(v -> {
-            DialogHelper.showConfirmDialog(this, "리뷰 등록", "작성하신 리뷰를 등록하시겠습니까?", new DialogHelper.OnDialogListener() {
+            DialogHelper.showConfirmDialog(this, getString(R.string.submit_review), getString(R.string.msg_confirm_review_submit), new DialogHelper.OnDialogListener() {
                 @Override
                 public void onConfirm() {
                     submitReview();
@@ -110,21 +146,13 @@ public class ReviewWriteActivity extends AppCompatActivity {
         });
     }
 
-    private void setRating(int rating) {
+    private void setRating(float rating) {
         currentRating = rating;
-        for (int i = 0; i < 5; i++) {
-            ImageView star = (ImageView) llStars.getChildAt(i);
-            if (i < rating) {
-                star.setImageResource(R.drawable.ic_star);
-            } else {
-                star.setImageResource(R.drawable.ic_star_border);
-            }
-        }
-        tvRatingValue.setText(String.format(Locale.getDefault(), "%.1f / 5.0", (double) rating));
+        tvRatingValue.setText(String.format(Locale.getDefault(), "%.1f / 5.0", rating));
     }
 
     private void submitReview() {
-        if (currentRating == 0) {
+        if (currentRating < 1.0f) {
             Toast.makeText(this, getString(R.string.msg_select_rating), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -136,6 +164,9 @@ public class ReviewWriteActivity extends AppCompatActivity {
         review.rating = (double) currentRating;
         if (!comment.isEmpty()) {
             review.review_comment = comment;
+        }
+        if (photoBase64 != null) {
+            review.photo_base64 = photoBase64;
         }
 
         SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
@@ -167,5 +198,37 @@ public class ReviewWriteActivity extends AppCompatActivity {
                 Toast.makeText(ReviewWriteActivity.this, getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void processSelectedImage(Uri uri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            if (inputStream != null) inputStream.close();
+
+            if (bitmap != null) {
+                // Resize for performance (max 1024px)
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                float scale = Math.min(1024f / width, 1024f / height);
+                if (scale < 1.0f) {
+                    bitmap = Bitmap.createScaledBitmap(bitmap, Math.round(width * scale), Math.round(height * scale), true);
+                }
+
+                // Show preview
+                ivSelectedPhoto.setImageBitmap(bitmap);
+                ivSelectedPhoto.setVisibility(View.VISIBLE);
+                icCamera.setVisibility(View.GONE);
+
+                // Convert to Base64
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos); // 70% quality
+                byte[] bytes = baos.toByteArray();
+                photoBase64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "이미지를 처리하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package kr.ac.waltdev29.hakplace;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.models.ReviewResponse;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
@@ -38,7 +40,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         ReviewResponse review = reviews.get(position);
 
         // Use meal_type directly from API
-        holder.tvMealType.setText(review.meal_type != null ? review.meal_type : "식단");
+        holder.tvMealType.setText(review.meal_type != null ? review.meal_type : holder.itemView.getContext().getString(R.string.meal_label));
         
         holder.tvRating.setText(String.format(Locale.getDefault(), "%.1f", review.rating));
         holder.tvComment.setText(review.review_comment);
@@ -56,17 +58,31 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
         if (review.photo_url != null && !review.photo_url.isEmpty()) {
             holder.ivReviewPhoto.setVisibility(View.VISIBLE);
-            // Assuming photo_url is a relative path or full URL
-            // If it's relative, you might need to prepend the base URL
+            
+            String fullUrl = review.photo_url;
+            if (!fullUrl.startsWith("http")) {
+                String baseUrl = ApiClient.getBaseUrl();
+                // Remove leading slash if exists to avoid double slash (base URL already ends with /)
+                String path = fullUrl.startsWith("/") ? fullUrl.substring(1) : fullUrl;
+                fullUrl = baseUrl + path;
+            }
+
             Glide.with(holder.itemView.getContext())
-                    .load(review.photo_url)
+                    .load(fullUrl)
                     .into(holder.ivReviewPhoto);
+
+            String finalUrl = fullUrl;
+            holder.ivReviewPhoto.setOnClickListener(v -> {
+                Intent intent = new Intent(holder.itemView.getContext(), ImageDetailActivity.class);
+                intent.putExtra("image_url", finalUrl);
+                holder.itemView.getContext().startActivity(intent);
+            });
         } else {
             holder.ivReviewPhoto.setVisibility(View.GONE);
+            holder.ivReviewPhoto.setOnClickListener(null);
         }
 
-        // Like count is not in the API yet, using a placeholder
-        holder.tvLikeCount.setText("0");
+        // Like count is not in the API yet, removed for now to fix build error
     }
 
     @Override
@@ -75,7 +91,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMealType, tvRating, tvComment, tvAuthor, tvDate, tvLikeCount;
+        TextView tvMealType, tvRating, tvComment, tvAuthor, tvDate;
         ImageView ivReviewPhoto;
 
         public ReviewViewHolder(@NonNull View itemView) {
@@ -85,7 +101,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             tvComment = itemView.findViewById(R.id.tvComment);
             tvAuthor = itemView.findViewById(R.id.tvAuthor);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
             ivReviewPhoto = itemView.findViewById(R.id.ivReviewPhoto);
         }
     }
