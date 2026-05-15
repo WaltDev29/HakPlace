@@ -304,8 +304,9 @@ public class ReviewListActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (id == R.id.nav_stats) {
-                Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
-                return false;
+                startActivity(new Intent(this, StatisticsActivity.class));
+                finish();
+                return true;
             }
             return false;
         });

@@ -12,6 +12,7 @@ gson = "2.11.0"
 glide = "4.16.0"
 okhttp = "4.12.0"
 dotenv = "3.0.0"
+mpandroidchart = "v3.1.0"
 
 
 [libraries]
@@ -29,6 +30,7 @@ glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", versi
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 dotenv = { group = "io.github.cdimascio", name = "java-dotenv", version.ref = "dotenv" }
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 
 [plugins]

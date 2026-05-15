@@ -68,6 +68,7 @@ dependencies {
     
     // Utils
     implementation(libs.dotenv)
+    implementation(libs.mpandroidchart)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

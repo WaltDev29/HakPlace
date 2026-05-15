@@ -10,6 +10,10 @@ import kr.ac.waltdev29.hakplace.api.models.Token;
 import kr.ac.waltdev29.hakplace.api.models.UserInfo;
 import kr.ac.waltdev29.hakplace.api.models.UserSignup;
 import kr.ac.waltdev29.hakplace.api.models.WeeklyMeals;
+import kr.ac.waltdev29.hakplace.api.models.WeeklyGraphData;
+import kr.ac.waltdev29.hakplace.api.models.MonthlyGraphData;
+import kr.ac.waltdev29.hakplace.api.models.FoodRatingList;
+import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -53,6 +57,15 @@ public interface ApiService {
 
     @GET("/statistics/")
     Call<StatisticList> getStatistics(@Query("period_type") String periodType);
+
+    @GET("/statistics/weekly")
+    Call<List<WeeklyGraphData>> getWeeklyGraphData(@Query("date") String date);
+
+    @GET("/statistics/monthly")
+    Call<List<MonthlyGraphData>> getMonthlyGraphData(@Query("month") String month);
+
+    @GET("/statistics/foods")
+    Call<FoodRatingList> getFoodRatings();
 
     @GET("/statistics/{stat_id}")
     Call<StatisticResponse> getStatistic(@Path("stat_id") int statId);

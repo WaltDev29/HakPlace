@@ -1,5 +1,6 @@
 package kr.ac.waltdev29.hakplace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -76,6 +77,10 @@ public class MenuTodayActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.nav_weekly) {
                 startActivity(new android.content.Intent(this, MenuWeekActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.nav_stats) {
+                startActivity(new Intent(this, StatisticsActivity.class));
                 finish();
                 return true;
             } else if (id == R.id.nav_review) {
