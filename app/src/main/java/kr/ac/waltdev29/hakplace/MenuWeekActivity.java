@@ -16,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
+import android.content.SharedPreferences;
 import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.ApiService;
 import kr.ac.waltdev29.hakplace.api.models.DailyMeals;
@@ -24,6 +26,7 @@ import kr.ac.waltdev29.hakplace.api.models.WeeklyMeals;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import kr.ac.waltdev29.hakplace.utils.DialogHelper;
 
 public class MenuWeekActivity extends AppCompatActivity {
 
@@ -48,6 +51,7 @@ public class MenuWeekActivity extends AppCompatActivity {
         setupMealCards();
         setupBottomNav();
         fetchWeeklyMeals();
+        fetchUserInfo();
 
         cardBreakfast.setOnClickListener(v -> {
             if (selectedDayIndex >= 0 && selectedDayIndex < weekMeals.size()) {
@@ -153,6 +157,27 @@ public class MenuWeekActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<WeeklyMeals> call, Throwable t) {
                 Toast.makeText(MenuWeekActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchUserInfo() {
+        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
+        String token = prefs.getString("access_token", null);
+        if (token == null) return;
+
+        apiService.getMe("Bearer " + token).enqueue(new Callback<kr.ac.waltdev29.hakplace.api.models.UserInfo>() {
+            @Override
+            public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call, Response<kr.ac.waltdev29.hakplace.api.models.UserInfo> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("student_id", response.body().student_id);
+                    editor.apply();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call, Throwable t) {
             }
         });
     }
@@ -323,12 +348,66 @@ public class MenuWeekActivity extends AppCompatActivity {
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         btnWrite.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(this, ReviewWriteActivity.class);
-            intent.putExtra("meal_id", meal.meal_id);
-            intent.putExtra("meal_type", mealType);
-            intent.putExtra("date", dateStr);
-            startActivity(intent);
-            dialog.dismiss();
+            // 1. 시간 및 날짜 제한 체크
+            if (!isReviewable(mealType, date)) {
+                String startTime = "";
+                if (mealType.equals("조식")) startTime = "07:30";
+                else if (mealType.equals("중식")) startTime = "11:30";
+                else if (mealType.equals("석식")) startTime = "17:30";
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+                sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+                String today = sdf.format(new Date());
+
+                String title = "리뷰 작성 제한";
+                String msg;
+                if (!today.equals(date)) {
+                    msg = "당일 식단만 리뷰를 작성할 수 있습니다.";
+                } else {
+                    title = mealType + " 리뷰 시간 안내";
+                    msg = mealType + " 리뷰는 " + startTime + "부터 작성 가능합니다.";
+                }
+                DialogHelper.showNotificationDialog(this, title, msg, null);
+                return;
+            }
+
+            // 2. 중복 작성 체크 (API 호출)
+            SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
+            String studentId = prefs.getString("student_id", null);
+
+            if (studentId == null) {
+                fetchUserInfo();
+                DialogHelper.showNotificationDialog(this, "정보 확인 중", "사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.", null);
+                return;
+            }
+
+            btnWrite.setEnabled(false);
+            apiService.listReviews(meal.meal_id, studentId, null, null, null).enqueue(new Callback<kr.ac.waltdev29.hakplace.api.models.ReviewList>() {
+                @Override
+                public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call, Response<kr.ac.waltdev29.hakplace.api.models.ReviewList> response) {
+                    btnWrite.setEnabled(true);
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (response.body().reviews != null && !response.body().reviews.isEmpty()) {
+                            DialogHelper.showNotificationDialog(MenuWeekActivity.this, "중복 작성 제한", "이미 이 식단에 리뷰를 작성하셨습니다.", null);
+                        } else {
+                            android.content.Intent intent = new android.content.Intent(MenuWeekActivity.this, ReviewWriteActivity.class);
+                            intent.putExtra("meal_id", meal.meal_id);
+                            intent.putExtra("meal_type", mealType);
+                            intent.putExtra("date", dateStr);
+                            startActivity(intent);
+                            dialog.dismiss();
+                        }
+                    } else {
+                        Toast.makeText(MenuWeekActivity.this, "상태 확인 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call, Throwable t) {
+                    btnWrite.setEnabled(true);
+                    Toast.makeText(MenuWeekActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
         btnView.setOnClickListener(v -> {
             Intent intent = new Intent(this, ReviewListActivity.class);
@@ -338,5 +417,29 @@ public class MenuWeekActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private boolean isReviewable(String mealType, String mealDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        String today = sdf.format(new Date());
+
+        if (!today.equals(mealDate)) {
+            return false;
+        }
+
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+        int currentTime = hour * 100 + minute;
+
+        if (mealType.equals("조식")) {
+            return currentTime >= 730;
+        } else if (mealType.equals("중식")) {
+            return currentTime >= 1130;
+        } else if (mealType.equals("석식")) {
+            return currentTime >= 1730;
+        }
+        return false;
     }
 }

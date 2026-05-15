@@ -77,4 +77,8 @@
     <string name="msg_wrong_access">잘못된 접근입니다.</string>
     <string name="msg_network_error">네트워크 오류</string>
     <string name="msg_preparing">준비 중인 기능입니다.</string>
+
+    <!-- My Page -->
+    <string name="mypage_app_info">앱 정보</string>
+    <string name="mypage_app_info_msg">학플(HakPlace) v1.0.0\n학생들을 위한 학식 정보 서비스입니다.\n\n문의: waltdev29@gmail.com</string>
 </resources>

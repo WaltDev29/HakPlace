@@ -84,9 +84,9 @@
 
                         <ImageView
                             android:id="@+id/ivAvatar"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/ic_person"
                             app:tint="@color/on_secondary_container" />
                     </androidx.cardview.widget.CardView>
@@ -116,12 +116,6 @@
                             android:textColor="@color/on_surface_variant"
                             android:textSize="14sp" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/outline_variant" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -182,9 +176,9 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- FAQ -->
+                <!-- App Info -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/btnFaq"
+                    android:id="@+id/btnAppInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -222,7 +216,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
-                            android:text="자주 묻는 질문"
+                            android:text="@string/mypage_app_info"
                             android:textColor="@color/on_surface"
                             android:textSize="16sp" />
 
@@ -291,23 +285,6 @@
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <!-- Version Info -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="32dp"
-                android:text="버전 1.0.0"
-                android:textColor="@color/outline"
-                android:textSize="14sp" />
-
         </LinearLayout>
 
     </ScrollView>

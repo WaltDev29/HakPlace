@@ -43,7 +43,13 @@ public interface ApiService {
     Call<ReviewResponse> createReview(@Header("Authorization") String bearer, @Body ReviewCreate review);
 
     @GET("/reviews/")
-    Call<ReviewList> listReviews(@Query("meal_id") Integer mealId, @Query("student_id") String studentId, @Query("sort_by") String sortBy);
+    Call<ReviewList> listReviews(
+            @Query("meal_id") Integer mealId,
+            @Query("student_id") String studentId,
+            @Query("sort_by") String sortBy,
+            @Query("start_date") String startDate,
+            @Query("end_date") String endDate
+    );
 
     @GET("/statistics/")
     Call<StatisticList> getStatistics(@Query("period_type") String periodType);

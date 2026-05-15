@@ -75,9 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setEnabled(true);
                 if (response.isSuccessful() && response.body() != null) {
                     boolean isAutoLogin = cbAutoLogin.isChecked();
-                    saveToken(response.body().getAccessToken(), isAutoLogin);
-                    
-                    Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                    saveToken(studentId, response.body().getAccessToken(), isAutoLogin);
                     startActivity(new Intent(LoginActivity.this, MenuTodayActivity.class));
                     finish();
                 } else {
@@ -97,9 +95,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveToken(String token, boolean autoLogin) {
+    private void saveToken(String studentId, String token, boolean autoLogin) {
         SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("student_id", studentId);
         editor.putString("access_token", token);
         editor.putBoolean("auto_login", autoLogin);
         editor.apply();

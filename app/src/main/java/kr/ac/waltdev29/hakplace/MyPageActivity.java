@@ -22,9 +22,10 @@ import retrofit2.Response;
 public class MyPageActivity extends AppCompatActivity {
 
     private TextView tvUserName, tvUserDetail;
-    private View btnMyReviews, btnFaq, btnLogout;
+    private View btnMyReviews, btnAppInfo, btnLogout;
     private ApiService apiService;
     private String token;
+    private String studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MyPageActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         tvUserDetail = findViewById(R.id.tvUserDetail);
         btnMyReviews = findViewById(R.id.btnMyReviews);
-        btnFaq = findViewById(R.id.btnFaq);
+        btnAppInfo = findViewById(R.id.btnAppInfo);
         btnLogout = findViewById(R.id.btnLogout);
 
         setupBottomNav();
@@ -56,11 +57,24 @@ public class MyPageActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         btnMyReviews.setOnClickListener(v -> {
-            Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
+            if (studentId == null) {
+                Toast.makeText(this, "사용자 정보를 불러오는 중입니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(this, ReviewListActivity.class);
+            intent.putExtra("is_my_reviews", true);
+            intent.putExtra("student_id", studentId);
+            startActivity(intent);
         });
 
-        btnFaq.setOnClickListener(v -> {
-            Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
+        btnAppInfo.setOnClickListener(v -> {
+            DialogHelper.showNotificationDialog(
+                    this,
+                    R.drawable.ic_help,
+                    getString(R.string.mypage_app_info),
+                    getString(R.string.mypage_app_info_msg),
+                    null
+            );
         });
 
         btnLogout.setOnClickListener(v -> {
@@ -84,8 +98,9 @@ public class MyPageActivity extends AppCompatActivity {
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserInfo userInfo = response.body();
+                    studentId = userInfo.student_id;
                     tvUserName.setText(userInfo.name);
-                    tvUserDetail.setText(userInfo.student_id);
+                    tvUserDetail.setText(studentId);
                 } else {
                     Toast.makeText(MyPageActivity.this, "사용자 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }

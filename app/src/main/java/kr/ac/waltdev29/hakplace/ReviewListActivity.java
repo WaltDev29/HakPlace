@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.util.Pair;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.ChipGroup;
 import java.text.SimpleDateFormat;
@@ -38,13 +39,21 @@ public class ReviewListActivity extends AppCompatActivity {
     private ReviewAdapter adapter;
     private ApiService apiService;
     private android.widget.Button btnSort;
-    private android.widget.Button btnDatePicker;
+    private android.widget.Button btnDateRange;
+    private android.widget.Button btnAllPeriod;
     private ChipGroup chipGroupMealType;
 
     private String currentSort = "newest";
-    private Integer currentMealId = null;
-    private Calendar selectedDate = Calendar.getInstance();
-    private DailyMeals mealsOfDate;
+    private Integer currentMealId = null; // Used for Intent-based specific meal filtering
+    private String currentMealTypeFilter = null; // Used for chip filtering (조식, 중식, 석식)
+    private boolean isMyReviewsMode = false;
+    private String studentIdFilter = null;
+    private android.widget.ImageView ivHeaderIcon;
+    private android.widget.TextView tvHeaderTitle;
+    private android.widget.ImageButton btnBack;
+    private String currentStartDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private String currentEndDate = currentStartDate;
+    private Calendar selectedDate = Calendar.getInstance(); // Default to today
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +64,12 @@ public class ReviewListActivity extends AppCompatActivity {
 
         rvReviews = findViewById(R.id.rvReviews);
         btnSort = findViewById(R.id.btnSort);
-        btnDatePicker = findViewById(R.id.btnDatePicker);
+        btnDateRange = findViewById(R.id.btnDateRange);
+        btnAllPeriod = findViewById(R.id.btnAllPeriod);
         chipGroupMealType = findViewById(R.id.chipGroupMealType);
+        ivHeaderIcon = findViewById(R.id.ivHeaderIcon);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        btnBack = findViewById(R.id.btnBack);
 
         adapter = new ReviewAdapter();
         rvReviews.setAdapter(adapter);
@@ -64,18 +77,27 @@ public class ReviewListActivity extends AppCompatActivity {
         // Intent handle
         if (getIntent().hasExtra("meal_id")) {
             currentMealId = getIntent().getIntExtra("meal_id", -1);
-            if (currentMealId == -1)
+            if (currentMealId == -1) {
                 currentMealId = null;
+            } else {
+                // If specific meal_id is provided, show total period for that meal
+                currentStartDate = null;
+                currentEndDate = null;
+            }
         }
 
-        updateDateButton();
+        if (getIntent().getBooleanExtra("is_my_reviews", false)) {
+            isMyReviewsMode = true;
+            studentIdFilter = getIntent().getStringExtra("student_id");
+            setupMyReviewsUI();
+        }
+
+        updateDateDisplay();
         setupFilters();
         setupBottomNav();
 
-        // Initial fetch: all reviews
+        // Initial fetch: all reviews for today
         fetchReviews();
-        // Also fetch meals for the current date to know meal_ids
-        fetchMealsOfDate();
     }
 
     private List<ReviewResponse> allReviewsFromApi = new ArrayList<>();
@@ -83,32 +105,60 @@ public class ReviewListActivity extends AppCompatActivity {
     private void setupFilters() {
         btnSort.setOnClickListener(v -> showSortMenu());
 
-        btnDatePicker.setOnClickListener(v -> {
-            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("날짜 선택")
-                    .setSelection(selectedDate.getTimeInMillis())
+        btnDateRange.setOnClickListener(v -> {
+            MaterialDatePicker<androidx.core.util.Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder
+                    .dateRangePicker()
+                    .setTitleText("기간 선택")
                     .setTheme(R.style.CustomMaterialCalendar)
                     .build();
 
-            datePicker.addOnPositiveButtonClickListener(selection -> {
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis(selection);
-                selectedDate.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH));
-                updateDateButton();
-                fetchMealsOfDate();
+            dateRangePicker.addOnPositiveButtonClickListener(selection -> {
+                SimpleDateFormat sdfApi = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat sdfDisplay = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+
+                Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                startCal.setTimeInMillis(selection.first);
+                Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                endCal.setTimeInMillis(selection.second);
+
+                currentStartDate = sdfApi.format(startCal.getTime());
+                currentEndDate = sdfApi.format(endCal.getTime());
+
+                btnDateRange
+                        .setText(sdfDisplay.format(startCal.getTime()) + " ~ " + sdfDisplay.format(endCal.getTime()));
+
+                // Reset meal type filter when date range changes
+                chipGroupMealType.check(R.id.chipAll);
+                currentMealTypeFilter = null;
+                currentMealId = null;
+
+                fetchReviews();
             });
 
-            datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+            dateRangePicker.show(getSupportFragmentManager(), "DATE_RANGE_PICKER");
+        });
+
+        btnAllPeriod.setOnClickListener(v -> {
+            currentStartDate = null;
+            currentEndDate = null;
+            btnDateRange.setText("전체 기간 (날짜 선택)");
+
+            // Reset meal type selection
+            chipGroupMealType.check(R.id.chipAll);
+            currentMealTypeFilter = null;
+            currentMealId = null;
+
+            fetchReviews();
         });
 
         chipGroupMealType.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            updateCurrentMealIdByChip();
+            updateMealTypeFilter();
         });
     }
 
     private void showSortMenu() {
-        android.view.ContextThemeWrapper contextWrapper = new android.view.ContextThemeWrapper(this, R.style.SortPopupMenuStyle);
+        android.view.ContextThemeWrapper contextWrapper = new android.view.ContextThemeWrapper(this,
+                R.style.SortPopupMenuStyle);
         androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(contextWrapper, btnSort);
         popup.getMenu().add(0, 0, 0, "최신순");
         popup.getMenu().add(0, 1, 1, "평점 높은 순");
@@ -133,104 +183,90 @@ public class ReviewListActivity extends AppCompatActivity {
         popup.show();
     }
 
-    private void updateDateButton() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-        btnDatePicker.setText(sdf.format(selectedDate.getTime()));
+    private void updateDateDisplay() {
+        if (currentStartDate == null || currentEndDate == null) {
+            btnDateRange.setText("전체 기간 (날짜 선택)");
+        } else {
+            try {
+                SimpleDateFormat sdfApi = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat sdfDisplay = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+                Date start = sdfApi.parse(currentStartDate);
+                Date end = sdfApi.parse(currentEndDate);
+                btnDateRange.setText(sdfDisplay.format(start) + " ~ " + sdfDisplay.format(end));
+            } catch (Exception e) {
+                btnDateRange.setText(currentStartDate + " ~ " + currentEndDate);
+            }
+        }
     }
 
-    private void fetchMealsOfDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String dateStr = sdf.format(selectedDate.getTime());
 
-        apiService.getToday(dateStr).enqueue(new Callback<DailyMeals>() {
-            @Override
-            public void onResponse(Call<DailyMeals> call, Response<DailyMeals> response) {
-                if (response.isSuccessful()) {
-                    mealsOfDate = response.body();
-
-                    // Update adapter mapping
-                    if (mealsOfDate != null) {
-                        Map<Integer, String> mapping = new HashMap<>();
-                        if (mealsOfDate.breakfast != null)
-                            mapping.put(mealsOfDate.breakfast.meal_id, "조식");
-                        if (mealsOfDate.lunch != null)
-                            mapping.put(mealsOfDate.lunch.meal_id, "중식");
-                        if (mealsOfDate.dinner != null)
-                            mapping.put(mealsOfDate.dinner.meal_id, "석식");
-                        adapter.setMealTypeMapping(mapping);
-                    }
-
-                    updateCurrentMealIdByChip();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DailyMeals> call, Throwable t) {
-            }
-        });
-    }
-
-    private void updateCurrentMealIdByChip() {
+    private void updateMealTypeFilter() {
         int checkedId = chipGroupMealType.getCheckedChipId();
         if (checkedId == R.id.chipAll) {
-            currentMealId = null;
+            currentMealTypeFilter = null;
         } else if (checkedId == R.id.chipBreakfast) {
-            currentMealId = (mealsOfDate != null && mealsOfDate.breakfast != null) ? mealsOfDate.breakfast.meal_id : -1;
+            currentMealTypeFilter = "조식";
         } else if (checkedId == R.id.chipLunch) {
-            currentMealId = (mealsOfDate != null && mealsOfDate.lunch != null) ? mealsOfDate.lunch.meal_id : -1;
+            currentMealTypeFilter = "중식";
         } else if (checkedId == R.id.chipDinner) {
-            currentMealId = (mealsOfDate != null && mealsOfDate.dinner != null) ? mealsOfDate.dinner.meal_id : -1;
+            currentMealTypeFilter = "석식";
         }
+        
+        // Update display list from cached data
+        updateDisplayList();
+    }
 
-        if (currentMealId != null && currentMealId == -1) {
-            Toast.makeText(this, "해당 식단 정보가 없습니다.", Toast.LENGTH_SHORT).show();
-            allReviewsFromApi = new ArrayList<>();
-            updateDisplayList();
-        } else {
-            fetchReviews();
-        }
+    private void setupMyReviewsUI() {
+        tvHeaderTitle.setText("내 리뷰");
+        ivHeaderIcon.setImageResource(R.drawable.ic_edit_document);
+        btnBack.setVisibility(View.VISIBLE);
+        btnBack.setOnClickListener(v -> finish());
+        
+        findViewById(R.id.bottomNav).setVisibility(View.GONE);
     }
 
     private void fetchReviews() {
-        // Fetch with newest by default, then sort locally
-        apiService.listReviews(currentMealId, null, "newest").enqueue(new Callback<ReviewList>() {
-            @Override
-            public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    allReviewsFromApi = response.body().reviews;
-                    updateDisplayList();
-                } else {
-                    Toast.makeText(ReviewListActivity.this, "리뷰를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        // Fetch ALL reviews for the date range, then filter locally by meal type
+        apiService.listReviews(null, studentIdFilter, "newest", currentStartDate, currentEndDate)
+                .enqueue(new Callback<ReviewList>() {
+                    @Override
+                    public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            allReviewsFromApi = response.body().reviews;
+                            updateDisplayList();
+                        } else {
+                            String errorMsg = "리뷰를 불러올 수 없습니다.";
+                            try {
+                                if (response.errorBody() != null) {
+                                    errorMsg += " (" + response.code() + ": " + response.errorBody().string() + ")";
+                                }
+                            } catch (Exception ignored) {
+                            }
+                            Toast.makeText(ReviewListActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                            android.util.Log.e("ReviewList",
+                                    "API Error: " + response.code() + " " + response.message());
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ReviewList> call, Throwable t) {
-                Toast.makeText(ReviewListActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<ReviewList> call, Throwable t) {
+                        Toast.makeText(ReviewListActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        android.util.Log.e("ReviewList", "Network Failure", t);
+                    }
+                });
     }
 
     private void updateDisplayList() {
-        List<ReviewResponse> displayList = new ArrayList<>(allReviewsFromApi);
+        List<ReviewResponse> displayList = new ArrayList<>();
 
-        // 1. Filtering (if "All" selected for specific date)
-        if (currentMealId == null && mealsOfDate != null) {
-            List<Integer> validMealIds = new ArrayList<>();
-            if (mealsOfDate.breakfast != null)
-                validMealIds.add(mealsOfDate.breakfast.meal_id);
-            if (mealsOfDate.lunch != null)
-                validMealIds.add(mealsOfDate.lunch.meal_id);
-            if (mealsOfDate.dinner != null)
-                validMealIds.add(mealsOfDate.dinner.meal_id);
-
-            List<ReviewResponse> filtered = new ArrayList<>();
-            for (ReviewResponse r : displayList) {
-                if (validMealIds.contains(r.meal_id)) {
-                    filtered.add(r);
+        // 1. Filtering by Meal Type (Cross-date range supported!)
+        for (ReviewResponse r : allReviewsFromApi) {
+            if (currentMealTypeFilter == null || currentMealTypeFilter.equals(r.meal_type)) {
+                // Also check if currentMealId was set (e.g. from Intent)
+                if (currentMealId == null || r.meal_id == currentMealId.intValue()) {
+                    displayList.add(r);
                 }
             }
-            displayList = filtered;
         }
 
         // 2. Sorting
