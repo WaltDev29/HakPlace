@@ -43,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnSignup = findViewById(R.id.btnSignup);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel = findViewById(R.id.btnSignupCancel);
         btnBack = findViewById(R.id.btnBack);
 
         etBirthDate.setOnClickListener(v -> showDatePicker());

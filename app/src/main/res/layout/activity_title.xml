@@ -23,7 +23,7 @@
             android:layout_width="192dp"
             android:layout_height="192dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo_no_bg" />
 
         <!-- Brand Text Content -->
         <TextView
