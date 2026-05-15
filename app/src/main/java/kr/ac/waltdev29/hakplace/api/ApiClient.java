@@ -15,6 +15,9 @@ public class ApiClient {
             try {
                 if (BuildConfig.API_URL != null && !BuildConfig.API_URL.isEmpty()) {
                     baseUrl = BuildConfig.API_URL;
+                    if (!baseUrl.endsWith("/")) {
+                        baseUrl += "/";
+                    }
                 }
             } catch (Throwable ignored) {}
 
