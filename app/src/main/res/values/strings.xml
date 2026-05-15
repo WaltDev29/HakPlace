@@ -61,6 +61,7 @@
     <string name="view_reviews">다른 사람 리뷰 보기</string>
     <string name="review_count_format">(%d명 평가)</string>
     <string name="no_meal_info">식단 정보가 없습니다.</string>
+    <string name="meal_label">식단</string>
 
     <!-- Review Write -->
     <string name="review_write_title">리뷰 작성</string>
@@ -81,4 +82,42 @@
     <!-- My Page -->
     <string name="mypage_app_info">앱 정보</string>
     <string name="mypage_app_info_msg">학플(HakPlace) v1.0.0\n학생들을 위한 학식 정보 서비스입니다.\n\n문의: waltdev29@gmail.com</string>
+
+    <!-- Statistics -->
+    <string name="error_graph_load">그래프 데이터를 불러올 수 없습니다.</string>
+    <string name="stat_rating_label">평점</string>
+    <string name="no_ai_analysis">분석 데이터가 존재하지 않습니다.</string>
+    <string name="no_data">데이터가 없습니다.</string>
+    <string name="unit_points">점</string>
+
+    <!-- Review List -->
+    <string name="period_select">기간 선택</string>
+    <string name="all_period_select">전체 기간 (날짜 선택)</string>
+    <string name="sort_newest">최신순</string>
+    <string name="sort_rating_high">평점 높은 순</string>
+    <string name="sort_rating_low">평점 낮은 순</string>
+    <string name="my_reviews">내 리뷰</string>
+    <string name="error_review_load">리뷰를 불러올 수 없습니다.</string>
+
+    <!-- Menu Today -->
+    <string name="info_not_found">정보 없음</string>
+    <string name="error_meal_load">식단 정보를 불러올 수 없습니다.</string>
+    <string name="review_restricted_title">리뷰 작성 제한</string>
+    <string name="review_restricted_today_msg">당일 식단만 리뷰를 작성할 수 있습니다.</string>
+    <string name="review_time_guide_title">%s 리뷰 시간 안내</string>
+    <string name="review_time_guide_msg">%1$s 리뷰는 %2$s부터 작성 가능합니다.</string>
+    <string name="checking_info">정보 확인 중</string>
+    <string name="syncing_user_info">사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="duplicate_review_title">중복 작성 제한</string>
+    <string name="duplicate_review_msg">이미 이 식단에 리뷰를 작성하셨습니다.</string>
+    <string name="status_check_failed">상태 확인 실패</string>
+
+    <!-- Common Messages -->
+    <string name="input_error">입력 오류</string>
+    <string name="login_input_prompt">학번과 비밀번호를 입력해주세요.</string>
+    <string name="login_failed">로그인 실패</string>
+    <string name="login_failed_msg">로그인 실패: 정보를 확인해주세요.</string>
+    <string name="connection_failed">연결 실패</string>
+    <string name="connection_failed_msg">서버 연결에 실패했습니다: %s</string>
+    <string name="msg_confirm_review_submit">작성하신 리뷰를 등록하시겠습니까?</string>
 </resources>

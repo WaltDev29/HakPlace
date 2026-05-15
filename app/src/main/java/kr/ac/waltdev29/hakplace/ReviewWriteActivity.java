@@ -96,7 +96,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         });
 
         btnSubmit.setOnClickListener(v -> {
-            DialogHelper.showConfirmDialog(this, "리뷰 등록", "작성하신 리뷰를 등록하시겠습니까?", new DialogHelper.OnDialogListener() {
+            DialogHelper.showConfirmDialog(this, getString(R.string.submit_review), getString(R.string.msg_confirm_review_submit), new DialogHelper.OnDialogListener() {
                 @Override
                 public void onConfirm() {
                     submitReview();

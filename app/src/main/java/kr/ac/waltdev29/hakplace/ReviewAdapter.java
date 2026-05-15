@@ -38,7 +38,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         ReviewResponse review = reviews.get(position);
 
         // Use meal_type directly from API
-        holder.tvMealType.setText(review.meal_type != null ? review.meal_type : "식단");
+        holder.tvMealType.setText(review.meal_type != null ? review.meal_type : holder.itemView.getContext().getString(R.string.meal_label));
         
         holder.tvRating.setText(String.format(Locale.getDefault(), "%.1f", review.rating));
         holder.tvComment.setText(review.review_comment);

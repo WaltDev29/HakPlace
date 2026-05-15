@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (studentId.isEmpty() || password.isEmpty()) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "학번과 비밀번호를 입력해주세요.", null);
+            DialogHelper.showNotificationDialog(this, getString(R.string.input_error), getString(R.string.login_input_prompt), null);
             return;
         }
 
@@ -79,18 +79,18 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, MenuTodayActivity.class));
                     finish();
                 } else {
-                    String errorMsg = "로그인 실패: 정보를 확인해주세요.";
+                    String errorMsg = getString(R.string.login_failed_msg);
                     if (response.errorBody() != null) {
                         errorMsg = kr.ac.waltdev29.hakplace.api.ErrorUtils.parseError(response.errorBody());
                     }
-                    DialogHelper.showNotificationDialog(LoginActivity.this, "로그인 실패", errorMsg, null);
+                    DialogHelper.showNotificationDialog(LoginActivity.this, getString(R.string.login_failed), errorMsg, null);
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
                 btnLogin.setEnabled(true);
-                DialogHelper.showNotificationDialog(LoginActivity.this, "연결 실패", "서버 연결에 실패했습니다: " + t.getMessage(), null);
+                DialogHelper.showNotificationDialog(LoginActivity.this, getString(R.string.connection_failed), String.format(getString(R.string.connection_failed_msg), t.getMessage()), null);
             }
         });
     }

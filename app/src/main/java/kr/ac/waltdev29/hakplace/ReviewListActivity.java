@@ -124,7 +124,7 @@ public class ReviewListActivity extends AppCompatActivity {
         btnDateRange.setOnClickListener(v -> {
             MaterialDatePicker<androidx.core.util.Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder
                     .dateRangePicker()
-                    .setTitleText("기간 선택")
+                    .setTitleText(getString(R.string.period_select))
                     .setTheme(R.style.CustomMaterialCalendar)
                     .build();
 
@@ -155,9 +155,8 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         btnAllPeriod.setOnClickListener(v -> {
-            currentStartDate = null;
             currentEndDate = null;
-            btnDateRange.setText("전체 기간 (날짜 선택)");
+            btnDateRange.setText(getString(R.string.all_period_select));
 
             // Reset meal type selection
             chipGroupMealType.check(R.id.chipAll);
@@ -176,9 +175,9 @@ public class ReviewListActivity extends AppCompatActivity {
         android.view.ContextThemeWrapper contextWrapper = new android.view.ContextThemeWrapper(this,
                 R.style.SortPopupMenuStyle);
         androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(contextWrapper, btnSort);
-        popup.getMenu().add(0, 0, 0, "최신순");
-        popup.getMenu().add(0, 1, 1, "평점 높은 순");
-        popup.getMenu().add(0, 2, 2, "평점 낮은 순");
+        popup.getMenu().add(0, 0, 0, getString(R.string.sort_newest));
+        popup.getMenu().add(0, 1, 1, getString(R.string.sort_rating_high));
+        popup.getMenu().add(0, 2, 2, getString(R.string.sort_rating_low));
 
         popup.setOnMenuItemClickListener(item -> {
             btnSort.setText(item.getTitle());
@@ -201,7 +200,7 @@ public class ReviewListActivity extends AppCompatActivity {
 
     private void updateDateDisplay() {
         if (currentStartDate == null || currentEndDate == null) {
-            btnDateRange.setText("전체 기간 (날짜 선택)");
+            btnDateRange.setText(getString(R.string.all_period_select));
         } else {
             try {
                 SimpleDateFormat sdfApi = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -233,7 +232,7 @@ public class ReviewListActivity extends AppCompatActivity {
     }
 
     private void setupMyReviewsUI() {
-        tvHeaderTitle.setText("내 리뷰");
+        tvHeaderTitle.setText(getString(R.string.my_reviews));
         ivHeaderIcon.setImageResource(R.drawable.ic_edit_document);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(v -> finish());
@@ -251,7 +250,7 @@ public class ReviewListActivity extends AppCompatActivity {
                             allReviewsFromApi = response.body().reviews;
                             updateDisplayList();
                         } else {
-                            String errorMsg = "리뷰를 불러올 수 없습니다.";
+                            String errorMsg = getString(R.string.error_review_load);
                             try {
                                 if (response.errorBody() != null) {
                                     errorMsg += " (" + response.code() + ": " + response.errorBody().string() + ")";
@@ -266,7 +265,7 @@ public class ReviewListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ReviewList> call, Throwable t) {
-                        Toast.makeText(ReviewListActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReviewListActivity.this, getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_LONG).show();
                         android.util.Log.e("ReviewList", "Network Failure", t);
                     }
                 });

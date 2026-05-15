@@ -177,7 +177,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<WeeklyGraphData>> call, Throwable t) {
-                    Toast.makeText(StatisticsActivity.this, "그래프 데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StatisticsActivity.this, getString(R.string.error_graph_load), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -193,7 +193,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<MonthlyGraphData>> call, Throwable t) {
-                    Toast.makeText(StatisticsActivity.this, "그래프 데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StatisticsActivity.this, getString(R.string.error_graph_load), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -249,7 +249,7 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels) {
-        LineDataSet dataSet = new LineDataSet(entries, "평점");
+        LineDataSet dataSet = new LineDataSet(entries, getString(R.string.stat_rating_label));
         dataSet.setColor(Color.parseColor("#2E7D32"));
         dataSet.setCircleColor(Color.parseColor("#2E7D32"));
         dataSet.setLineWidth(2f);
@@ -369,7 +369,7 @@ public class StatisticsActivity extends AppCompatActivity {
             comment = new Gson().fromJson(json, WeeklyAIComment.class);
         }
 
-        tvAiAnalysis.setText(comment.ai_analysis != null ? comment.ai_analysis : "데이터가 없습니다.");
+        tvAiAnalysis.setText(comment.ai_analysis != null ? comment.ai_analysis : getString(R.string.no_data));
         tvTrendAnalysis.setText(comment.trend_analysis != null ? comment.trend_analysis : "-");
         
         String bestMealStr = "-";
@@ -397,7 +397,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 }
             }
             if (bestWeek != null && maxRating > 0) {
-                bestMealStr = bestWeek.label + " (" + String.format(Locale.getDefault(), "%.1f", maxRating) + "점)";
+                bestMealStr = bestWeek.label + " (" + String.format(Locale.getDefault(), "%.1f", maxRating) + getString(R.string.unit_points) + ")";
             }
         }
         tvBestMeal.setText(bestMealStr);
@@ -406,7 +406,7 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void fetchAndDisplayBestMealDetails(String date, String label, double dayAvg) {
-        tvBestMeal.setText(label + " (" + String.format(Locale.getDefault(), "%.1f", dayAvg) + "점)");
+        tvBestMeal.setText(label + " (" + String.format(Locale.getDefault(), "%.1f", dayAvg) + getString(R.string.unit_points) + ")");
 
         apiService.getToday(date).enqueue(new Callback<DailyMeals>() {
             @Override
@@ -439,7 +439,7 @@ public class StatisticsActivity extends AppCompatActivity {
                             StringBuilder sb = new StringBuilder();
                             sb.append(dateLabel).append(" ").append(bestMeal.meal_type)
                                     .append(" [").append(String.format(Locale.getDefault(), "%.1f", bestMeal.avg_rating))
-                                    .append("점]\n");
+                                    .append(getString(R.string.unit_points)).append("]\n");
 
                             if (bestMeal.foods != null) {
                                 for (int i = 0; i < bestMeal.foods.size(); i++) {
@@ -461,7 +461,7 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void resetAiComment() {
-        tvAiAnalysis.setText("분석 데이터가 존재하지 않습니다.");
+        tvAiAnalysis.setText(getString(R.string.no_ai_analysis));
         tvTrendAnalysis.setText("-");
         tvBestMeal.setText("-");
         tvImprovementPoints.setText("-");

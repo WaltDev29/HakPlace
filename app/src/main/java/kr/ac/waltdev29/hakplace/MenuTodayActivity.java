@@ -94,7 +94,7 @@ public class MenuTodayActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (id == R.id.nav_stats) {
-                Toast.makeText(this, "준비 중인 기능입니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.msg_preparing), Toast.LENGTH_SHORT).show();
                 return false;
             }
             return false;
@@ -114,14 +114,14 @@ public class MenuTodayActivity extends AppCompatActivity {
                     currentMeals = response.body();
                     displayMeals(currentMeals);
                 } else {
-                    Toast.makeText(MenuTodayActivity.this, "식단 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuTodayActivity.this, getString(R.string.error_meal_load), Toast.LENGTH_SHORT).show();
                     setEmptyState();
                 }
             }
 
             @Override
             public void onFailure(Call<DailyMeals> call, Throwable t) {
-                Toast.makeText(MenuTodayActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuTodayActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
                 setEmptyState();
             }
 
@@ -271,13 +271,13 @@ public class MenuTodayActivity extends AppCompatActivity {
                 sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
                 String today = sdf.format(new Date());
 
-                String title = "리뷰 작성 제한";
+                String title = getString(R.string.review_restricted_title);
                 String msg;
                 if (currentMeals == null || !today.equals(currentMeals.date)) {
-                    msg = "당일 식단만 리뷰를 작성할 수 있습니다.";
+                    msg = getString(R.string.review_restricted_today_msg);
                 } else {
-                    title = mealType + " 리뷰 시간 안내";
-                    msg = mealType + " 리뷰는 " + startTime + "부터 작성 가능합니다.";
+                    title = String.format(Locale.getDefault(), getString(R.string.review_time_guide_title), mealType);
+                    msg = String.format(Locale.getDefault(), getString(R.string.review_time_guide_msg), mealType, startTime);
                 }
                 DialogHelper.showNotificationDialog(this, title, msg, null);
                 return;
@@ -290,7 +290,7 @@ public class MenuTodayActivity extends AppCompatActivity {
             if (studentId == null) {
                 // 정보가 없으면 즉시 동기화 시도 후 안내
                 fetchUserInfo();
-                DialogHelper.showNotificationDialog(this, "정보 확인 중", "사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.", null);
+                DialogHelper.showNotificationDialog(this, getString(R.string.checking_info), getString(R.string.syncing_user_info), null);
                 return;
             }
 
@@ -304,8 +304,8 @@ public class MenuTodayActivity extends AppCompatActivity {
                             if (response.isSuccessful() && response.body() != null) {
                                 if (response.body().reviews != null && !response.body().reviews.isEmpty()) {
                                     // 이미 리뷰가 존재하는 경우
-                                    DialogHelper.showNotificationDialog(MenuTodayActivity.this, "중복 작성 제한",
-                                            "이미 이 식단에 리뷰를 작성하셨습니다.", null);
+                                    DialogHelper.showNotificationDialog(MenuTodayActivity.this, getString(R.string.duplicate_review_title),
+                                            getString(R.string.duplicate_review_msg), null);
                                 } else {
                                     // 리뷰가 없는 경우 이동
                                     android.content.Intent intent = new android.content.Intent(MenuTodayActivity.this,
@@ -317,7 +317,7 @@ public class MenuTodayActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             } else {
-                                Toast.makeText(MenuTodayActivity.this, "상태 확인 실패", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MenuTodayActivity.this, getString(R.string.status_check_failed), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -325,7 +325,7 @@ public class MenuTodayActivity extends AppCompatActivity {
                         public void onFailure(retrofit2.Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call,
                                 Throwable t) {
                             btnWrite.setEnabled(true);
-                            Toast.makeText(MenuTodayActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MenuTodayActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
                         }
                     });
         });
@@ -369,7 +369,7 @@ public class MenuTodayActivity extends AppCompatActivity {
     }
 
     private void setEmptyState() {
-        tvDateHeader.setText("정보 없음");
+        tvDateHeader.setText(getString(R.string.info_not_found));
         updateMealInfo(cardBreakfast, null);
         updateMealInfo(cardLunch, null);
         updateMealInfo(cardDinner, null);
