@@ -316,8 +316,13 @@ public class MenuTodayActivity extends AppCompatActivity {
             });
         });
         btnView.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(this, ReviewListActivity.class);
+            Intent intent = new Intent(this, ReviewListActivity.class);
             intent.putExtra("meal_id", meal.meal_id);
+            if (currentMeals != null) {
+                intent.putExtra("start_date", currentMeals.date);
+                intent.putExtra("end_date", currentMeals.date);
+            }
+            intent.putExtra("meal_type", mealType);
             startActivity(intent);
             dialog.dismiss();
         });

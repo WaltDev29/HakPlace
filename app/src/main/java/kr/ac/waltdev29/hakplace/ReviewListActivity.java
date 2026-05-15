@@ -80,10 +80,19 @@ public class ReviewListActivity extends AppCompatActivity {
             if (currentMealId == -1) {
                 currentMealId = null;
             } else {
-                // If specific meal_id is provided, show total period for that meal
                 currentStartDate = null;
                 currentEndDate = null;
             }
+        }
+
+        if (getIntent().hasExtra("start_date")) {
+            currentStartDate = getIntent().getStringExtra("start_date");
+        }
+        if (getIntent().hasExtra("end_date")) {
+            currentEndDate = getIntent().getStringExtra("end_date");
+        }
+        if (getIntent().hasExtra("meal_type")) {
+            currentMealTypeFilter = getIntent().getStringExtra("meal_type");
         }
 
         if (getIntent().getBooleanExtra("is_my_reviews", false)) {
@@ -96,7 +105,14 @@ public class ReviewListActivity extends AppCompatActivity {
         setupFilters();
         setupBottomNav();
 
-        // Initial fetch: all reviews for today
+        // Initial check for meal type chips based on intent
+        if (currentMealTypeFilter != null) {
+            if ("조식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipBreakfast);
+            else if ("중식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipLunch);
+            else if ("석식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipDinner);
+        }
+
+        // Initial fetch: all reviews for today or filtered range
         fetchReviews();
     }
 

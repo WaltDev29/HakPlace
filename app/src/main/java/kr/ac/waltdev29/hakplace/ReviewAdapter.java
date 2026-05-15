@@ -65,8 +65,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             holder.ivReviewPhoto.setVisibility(View.GONE);
         }
 
-        // Like count is not in the API yet, using a placeholder
-        holder.tvLikeCount.setText("0");
+        // Like count is not in the API yet, removed for now to fix build error
     }
 
     @Override
@@ -75,7 +74,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMealType, tvRating, tvComment, tvAuthor, tvDate, tvLikeCount;
+        TextView tvMealType, tvRating, tvComment, tvAuthor, tvDate;
         ImageView ivReviewPhoto;
 
         public ReviewViewHolder(@NonNull View itemView) {
@@ -85,7 +84,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             tvComment = itemView.findViewById(R.id.tvComment);
             tvAuthor = itemView.findViewById(R.id.tvAuthor);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
             ivReviewPhoto = itemView.findViewById(R.id.ivReviewPhoto);
         }
     }
