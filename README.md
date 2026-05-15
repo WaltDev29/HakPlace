@@ -1,28 +1,98 @@
-# 🍱 HakPlace Android App
+# HakPlace (학식 앱) 🍱
 
-대학생들을 위한 지능형 학식 리뷰 및 분석 플랫폼 **학플(HakPlace)**의 안드로이드 클라이언트 앱입니다.
+> **"오늘 학식 뭐 나오지? 맛은 어떨까?"**  
+> 대학 생활의 중심인 학식을 스마트하게 즐기는 방법, HakPlace입니다.
 
-## ⚙️ 프로젝트 설정 (Setup)
+HakPlace는 대학생들을 위한 맞춤형 **학식 조회 및 리뷰 공유 Android 애플리케이션**입니다. 
+단순한 메뉴 조회를 넘어, 학생들 간의 솔직한 평가와 AI 기반 식단 분석을 통해 더 나은 학식 경험을 제공합니다.
 
-이 프로젝트는 서버 API 주소와 같은 환경 변수를 `local.properties` 파일을 통해 관리합니다. 프로젝트를 처음 클론 받으신 후 아래 절차를 따라주세요.
 
-### 1. 환경 변수 설정
-프로젝트 루트에 있는 `local.properties.template` 파일을 복사하여 `local.properties` 파일을 생성합니다.
+## 📸 스크린샷
 
-```bash
-cp local.properties.template local.properties
+| 오늘 학식 | 이번주 학식 | 리뷰 목록 | 평점 통계 |
+| :---: | :---: | :---: | :---: |
+| <img src="" width="200"> | <img src="" width="200"> | <img src="" width="200"> | <img src="" width="200"> |
+
+
+## 🚀 주요 기능
+
+### 1. 식단 조회 (Today & Weekly)
+- **금일 메뉴**: 오늘 제공되는 조식, 중식, 석식 메뉴를 사진과 함께 실시간으로 확인합니다.
+- **금주 메뉴**: 요일별/식사 종류별로 일주일간의 식단 계획을 미리 파악할 수 있습니다.
+
+### 2. 리뷰 및 평점 시스템
+- **솔직한 리뷰**: 메뉴별로 별점과 텍스트, 사진을 포함한 상세 리뷰를 작성하고 공유합니다.
+- **실시간 평점**: 메뉴의 평균 평점을 통해 어떤 메뉴가 인기 있는지 한눈에 알 수 있습니다.
+
+### 3. AI 기반 식단 분석
+- **데이터 통계**: 주간/월간 단위의 평점 추이를 차트로 시각화합니다.
+- **AI 요약**: 서버의 AI가 리뷰를 분석하여 식단의 강점과 보완점을 요약해서 알려줍니다.
+
+### 4. 사용자 관리
+- **회원가입 및 로그인**: JWT 기반 인증을 통해 안전하게 계정을 관리합니다.
+- **마이페이지**: 내가 쓴 리뷰 목록을 관리하고 프로필 정보를 수정할 수 있습니다.
+
+
+## 🛠 기술 스택
+
+- **Platform**: Android Native
+- **Language**: Java (Android SDK)
+- **Architecture**: MVVM (ViewModel, LiveData, Repository 패턴)
+- **Networking**: Retrofit2, OkHttp3, Gson
+- **Image Loading**: Glide (이미지 캐싱 및 로딩 최적화)
+- **UI/UX**: Material Design, Custom Progress Bars, Multi-part Image Upload
+- **Security**: EncryptedSharedPreferences (토큰 보안 저장)  
+
+
+## 📂 프로젝트 구조
+
+```text
+app/src/main
+├── AndroidManifest.xml      # 앱 매니페스트 (권한, 액티비티 설정)
+├── java/kr/ac/waltdev29/hakplace
+│   ├── api/                 # API 통신 관련 (Retrofit, DTO)
+│   │   ├── ApiClient.java
+│   │   ├── ApiInterface.java
+│   │   └── models/          # 데이터 모델 (DailyMeals, ReviewList 등)
+│   ├── utils/               # 공통 유틸리티 (DialogHelper 등)
+│   ├── fragments/           # UI 프래그먼트
+│   └── (Activities)/        # 주요 화면 액티비티
+│       ├── TitleActivity.java
+│       ├── LoginActivity.java
+│       ├── MenuTodayActivity.java
+│       ├── MenuWeekActivity.java
+│       ├── ReviewWriteActivity.java
+│       └── ... (그 외 화면들)
+└── res/
+    ├── layout/              # XML 레이아웃 파일
+    │   ├── activity_*.xml   # 각 화면 레이아웃
+    │   ├── dialog_*.xml     # 팝업/모달 레이아웃
+    │   └── item_*.xml       # 리스트 아이템 레이아웃
+    ├── values/              # 리소스 값 (strings, colors, themes)
+    └── drawable/            # 이미지 및 그래픽 리소스
 ```
 
-### 2. API URL 수정
-생성한 `local.properties` 파일을 열고 `api.url` 항목에 실제 서버 주소를 입력합니다.
-* **주의**: URL 마지막은 반드시 슬래시(`/`)로 끝나야 합니다. (예: `https://example.com/hakplace/`)
 
-```properties
-api.url=https://your-api-domain.com/hakplace/
-```
+## ⚙️ 시작하기
 
-### 3. 빌드 및 실행
-Android Studio에서 프로젝트를 열고 Sync를 진행한 뒤 빌드합니다. `BuildConfig.API_URL`을 통해 설정한 주소가 자동으로 반영됩니다.
+### 사전 요구사항
+- Android Studio Iguana 이상 권장
+- Android SDK API Level 26 (Oreo) 이상
 
----
-© 2026 HakPlace Team. All rights reserved.
+### 설정 방법
+
+1. **저장소 클론**
+   ```bash
+   git clone https://github.com/your-repo/HakPlace.git
+   ```
+
+2. **환경 변수 설정**
+   - 프로젝트 루트 디렉토리에 `local.properties.template` 파일을 참고하여 `local.properties` 파일을 생성합니다.
+
+3. **빌드 및 실행**
+   - Android Studio에서 프로젝트를 엽니다.
+   - Gradle Sync 완료 후 에뮬레이터 또는 실기기에서 실행합니다.
+
+
+## 🤝 기여하기
+버그 리포트나 기능 제안은 Issue 탭을 통해 언제든지 환영합니다!
