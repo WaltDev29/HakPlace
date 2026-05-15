@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Solid Background Layer -->
+    <item>
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+
+    <!-- Top-Right Radial Gradient (Light Green) -->
+    <item>
+        <shape>
+            <gradient
+                android:type="radial"
+                android:centerX="1.0"
+                android:centerY="0.0"
+                android:gradientRadius="600dp"
+                android:startColor="@color/bg_emerald_top_right"
+                android:endColor="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- Bottom-Left Radial Gradient (Forest Green tint) -->
+    <item>
+        <shape>
+            <gradient
+                android:type="radial"
+                android:centerX="0.0"
+                android:centerY="1.0"
+                android:gradientRadius="600dp"
+                android:startColor="@color/bg_emerald_bottom_left"
+                android:endColor="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_today"
+        android:icon="@drawable/ic_restaurant"
+        android:title="@string/tab_today" />
+    <item
+        android:id="@+id/nav_weekly"
+        android:icon="@drawable/ic_calendar_month"
+        android:title="@string/tab_weekly" />
+
+    <item
+        android:id="@+id/nav_stats"
+        android:icon="@drawable/ic_stats"
+        android:title="@string/tab_stats" />
+    <item
+        android:id="@+id/nav_review"
+        android:icon="@drawable/ic_forum"
+        android:title="@string/tab_review" />
+    <item
+        android:id="@+id/nav_mypage"
+        android:icon="@drawable/ic_person"
+        android:title="@string/tab_mypage" />
+</menu>

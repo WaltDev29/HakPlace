@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_options">
+        <item>최신순</item>
+        <item>평점 높은 순</item>
+        <item>평점 낮은 순</item>
+    </string-array>
+</resources>

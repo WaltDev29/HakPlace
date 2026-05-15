@@ -1,3 +1,123 @@
 <resources>
-    <string name="app_name">HakPlace</string>
+    <string name="app_name">Hakplace</string>
+    <string name="splash_slogan">식사가 즐거워지는 순간, 학플</string>
+    
+    <!-- Login Page -->
+    <string name="login_slogan">식사가 즐거워지는 순간, 학플</string>
+    <string name="student_id_label">학번</string>
+    <string name="student_id_hint">학번을 입력해주세요</string>
+    <string name="password_label">비밀번호</string>
+    <string name="password_hint">비밀번호를 입력해주세요</string>
+    <string name="login_button">로그인</string>
+    <string name="auto_login">자동 로그인</string>
+    <string name="find_password">비밀번호 찾기</string>
+    <string name="no_account_prompt">계정이 없으신가요?</string>
+    <string name="signup_button">회원가입</string>
+    
+    <!-- Signup Page -->
+    <string name="signup_title">회원가입</string>
+    <string name="name_label">이름</string>
+    <string name="name_hint">이름을 입력하세요</string>
+    <string name="student_id_hint_signup">학번 10자리를 입력하세요</string>
+    <string name="birth_date_label">생년월일</string>
+    <string name="birth_date_hint">YYYY-MM-DD</string>
+    <string name="phone_label">전화번호</string>
+    <string name="phone_hint">010-0000-0000</string>
+    <string name="gender_label">성별</string>
+    <string name="gender_male">남</string>
+    <string name="gender_female">여</string>
+
+    <string name="password_confirm_label">비밀번호 확인</string>
+
+    <string name="password_confirm_hint">비밀번호를 한번 더 입력하세요</string>
+    <string name="password_hint_text">비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상으로 설정해 주세요.</string>
+    <string name="cancel_button">취소</string>
+    <string name="policy_text">가입 시 Hakplace의 이용약관 및 개인정보 처리방침에 동의하게 됩니다.</string>
+
+    <!-- Main Page (Today's Menu) -->
+    <string name="main_title">오늘 학식</string>
+    <string name="breakfast">조식</string>
+    <string name="lunch">중식</string>
+    <string name="dinner">석식</string>
+    <string name="breakfast_time">08:00 ~ 09:30</string>
+    <string name="lunch_time">11:30 ~ 13:30</string>
+    <string name="dinner_time">17:00 ~ 18:30</string>
+    <string name="tab_today">오늘 학식</string>
+    <string name="tab_weekly">이번주 학식</string>
+    <string name="tab_stats">평점 통계</string>
+    <string name="tab_review">리뷰</string>
+    <string name="tab_mypage">마이페이지</string>
+
+    <!-- Weekly Menu -->
+    <string name="weekly_menu_title">이번주 학식</string>
+    <string name="mon">월</string>
+    <string name="tue">화</string>
+    <string name="wed">수</string>
+    <string name="thu">목</string>
+    <string name="fri">금</string>
+
+    <!-- Meal Detail Popup -->
+    <string name="write_review">리뷰 작성하기</string>
+    <string name="view_reviews">다른 사람 리뷰 보기</string>
+    <string name="review_count_format">(%d명 평가)</string>
+    <string name="no_meal_info">식단 정보가 없습니다.</string>
+    <string name="meal_label">식단</string>
+
+    <!-- Review Write -->
+    <string name="review_write_title">리뷰 작성</string>
+    <string name="rating_label">평점</string>
+    <string name="review_comment_label">리뷰 (선택)</string>
+    <string name="photo_add_label">사진 추가 (선택)</string>
+    <string name="submit_review">등록하기</string>
+    <string name="review_disclaimer">등록한 평가는 수정/삭제가 불가합니다.</string>
+    <string name="review_info_msg">평가는 당일 식사 시간부터 작성할 수 있습니다.</string>
+    <string name="review_comment_hint">매콤하고 맛있었어요! 고기도 부드러웠습니다.</string>
+    <string name="msg_select_rating">평점을 선택해주세요.</string>
+    <string name="msg_review_registered">리뷰가 등록되었습니다.</string>
+    <string name="msg_login_required">로그인이 필요합니다.</string>
+    <string name="msg_wrong_access">잘못된 접근입니다.</string>
+    <string name="msg_network_error">네트워크 오류</string>
+    <string name="msg_preparing">준비 중인 기능입니다.</string>
+
+    <!-- My Page -->
+    <string name="mypage_app_info">앱 정보</string>
+    <string name="mypage_app_info_msg">학플(HakPlace) v1.0.0\n학생들을 위한 학식 정보 서비스입니다.\n\n문의: waltdev29@gmail.com</string>
+
+    <!-- Statistics -->
+    <string name="error_graph_load">그래프 데이터를 불러올 수 없습니다.</string>
+    <string name="stat_rating_label">평점</string>
+    <string name="no_ai_analysis">분석 데이터가 존재하지 않습니다.</string>
+    <string name="no_data">데이터가 없습니다.</string>
+    <string name="unit_points">점</string>
+
+    <!-- Review List -->
+    <string name="period_select">기간 선택</string>
+    <string name="all_period_select">전체 기간 (날짜 선택)</string>
+    <string name="sort_newest">최신순</string>
+    <string name="sort_rating_high">평점 높은 순</string>
+    <string name="sort_rating_low">평점 낮은 순</string>
+    <string name="my_reviews">내 리뷰</string>
+    <string name="error_review_load">리뷰를 불러올 수 없습니다.</string>
+
+    <!-- Menu Today -->
+    <string name="info_not_found">정보 없음</string>
+    <string name="error_meal_load">식단 정보를 불러올 수 없습니다.</string>
+    <string name="review_restricted_title">리뷰 작성 제한</string>
+    <string name="review_restricted_today_msg">당일 식단만 리뷰를 작성할 수 있습니다.</string>
+    <string name="review_time_guide_title">%s 리뷰 시간 안내</string>
+    <string name="review_time_guide_msg">%1$s 리뷰는 %2$s부터 작성 가능합니다.</string>
+    <string name="checking_info">정보 확인 중</string>
+    <string name="syncing_user_info">사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.</string>
+    <string name="duplicate_review_title">중복 작성 제한</string>
+    <string name="duplicate_review_msg">이미 이 식단에 리뷰를 작성하셨습니다.</string>
+    <string name="status_check_failed">상태 확인 실패</string>
+
+    <!-- Common Messages -->
+    <string name="input_error">입력 오류</string>
+    <string name="login_input_prompt">학번과 비밀번호를 입력해주세요.</string>
+    <string name="login_failed">로그인 실패</string>
+    <string name="login_failed_msg">로그인 실패: 정보를 확인해주세요.</string>
+    <string name="connection_failed">연결 실패</string>
+    <string name="connection_failed_msg">서버 연결에 실패했습니다: %s</string>
+    <string name="msg_confirm_review_submit">작성하신 리뷰를 등록하시겠습니까?</string>
 </resources>
