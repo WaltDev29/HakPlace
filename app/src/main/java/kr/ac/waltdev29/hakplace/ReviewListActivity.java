@@ -99,6 +99,8 @@ public class ReviewListActivity extends AppCompatActivity {
             isMyReviewsMode = true;
             studentIdFilter = getIntent().getStringExtra("student_id");
             setupMyReviewsUI();
+            currentStartDate = null;
+            currentEndDate = null;
         }
 
         updateDateDisplay();
@@ -107,9 +109,12 @@ public class ReviewListActivity extends AppCompatActivity {
 
         // Initial check for meal type chips based on intent
         if (currentMealTypeFilter != null) {
-            if ("조식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipBreakfast);
-            else if ("중식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipLunch);
-            else if ("석식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipDinner);
+            if ("조식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipBreakfast);
+            else if ("중식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipLunch);
+            else if ("석식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipDinner);
         }
 
         // Initial fetch: all reviews for today or filtered range
@@ -155,6 +160,7 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         btnAllPeriod.setOnClickListener(v -> {
+            currentStartDate = null;
             currentEndDate = null;
             btnDateRange.setText(getString(R.string.all_period_select));
 
@@ -214,7 +220,6 @@ public class ReviewListActivity extends AppCompatActivity {
         }
     }
 
-
     private void updateMealTypeFilter() {
         int checkedId = chipGroupMealType.getCheckedChipId();
         if (checkedId == R.id.chipAll) {
@@ -226,7 +231,7 @@ public class ReviewListActivity extends AppCompatActivity {
         } else if (checkedId == R.id.chipDinner) {
             currentMealTypeFilter = "석식";
         }
-        
+
         // Update display list from cached data
         updateDisplayList();
     }
@@ -236,7 +241,7 @@ public class ReviewListActivity extends AppCompatActivity {
         ivHeaderIcon.setImageResource(R.drawable.ic_edit_document);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(v -> finish());
-        
+
         findViewById(R.id.bottomNav).setVisibility(View.GONE);
     }
 
@@ -265,7 +270,9 @@ public class ReviewListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ReviewList> call, Throwable t) {
-                        Toast.makeText(ReviewListActivity.this, getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReviewListActivity.this,
+                                getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_LONG)
+                                .show();
                         android.util.Log.e("ReviewList", "Network Failure", t);
                     }
                 });
