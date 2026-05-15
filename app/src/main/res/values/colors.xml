@@ -40,5 +40,7 @@
     
     <color name="black">#FF000000</color>
 
+    <color name="bg_emerald_top_right">#66CBFFC2</color>
+    <color name="bg_emerald_bottom_left">#0D2E7D32</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
