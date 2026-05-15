@@ -316,9 +316,16 @@ public class StatisticsActivity extends AppCompatActivity {
                     List<StatisticResponse> stats = response.body().stats;
                     String targetValue;
                     if (isWeekly) {
-                        Calendar monday = (Calendar) currentCalendar.clone();
-                        monday.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                        targetValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(monday.getTime());
+                        Calendar cal = (Calendar) currentCalendar.clone();
+                        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                        // 요일 계산 (일요일=1, 월요일=2, ...)
+                        // 월요일을 주의 시작으로 맞춤
+                        if (dayOfWeek == Calendar.SUNDAY) {
+                            cal.add(Calendar.DATE, -6);
+                        } else {
+                            cal.add(Calendar.DATE, Calendar.MONDAY - dayOfWeek);
+                        }
+                        targetValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cal.getTime());
                     } else {
                         targetValue = new SimpleDateFormat("yyyy-MM", Locale.getDefault())
                                 .format(currentCalendar.getTime());
@@ -358,7 +365,53 @@ public class StatisticsActivity extends AppCompatActivity {
 
         tvAiAnalysis.setText(comment.ai_analysis != null ? comment.ai_analysis : "데이터가 없습니다.");
         tvTrendAnalysis.setText(comment.trend_analysis != null ? comment.trend_analysis : "-");
-        tvBestMeal.setText(comment.best_meal != null ? comment.best_meal : "-");
+        
+        String bestMealStr = "-";
+        if (comment.best_meal != null) {
+            if (comment.best_meal instanceof String) {
+                bestMealStr = (String) comment.best_meal;
+            } else {
+                try {
+                    String json = new Gson().toJson(comment.best_meal);
+                    com.google.gson.internal.LinkedTreeMap<String, Object> map = 
+                        new Gson().fromJson(json, com.google.gson.internal.LinkedTreeMap.class);
+                    
+                    String day = (String) map.get("day");
+                    String type = (String) map.get("type");
+                    List<String> foods = (List<String>) map.get("foods");
+                    
+                    // 요일 번역
+                    if (day != null) {
+                        switch (day.toLowerCase()) {
+                            case "mon": day = "월"; break;
+                            case "tue": day = "화"; break;
+                            case "wed": day = "수"; break;
+                            case "thu": day = "목"; break;
+                            case "fri": day = "금"; break;
+                            case "sat": day = "토"; break;
+                            case "sun": day = "일"; break;
+                        }
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+                    if (day != null) sb.append(day).append("요일 ");
+                    if (type != null) sb.append(type);
+                    if (foods != null && !foods.isEmpty()) {
+                        sb.append(" (");
+                        for (int i = 0; i < foods.size(); i++) {
+                            sb.append(foods.get(i));
+                            if (i < foods.size() - 1) sb.append(", ");
+                        }
+                        sb.append(")");
+                    }
+                    bestMealStr = sb.toString().trim();
+                    if (bestMealStr.isEmpty()) bestMealStr = comment.best_meal.toString();
+                } catch (Exception e) {
+                    bestMealStr = comment.best_meal.toString();
+                }
+            }
+        }
+        tvBestMeal.setText(bestMealStr);
         tvImprovementPoints.setText(comment.improvement_points != null ? comment.improvement_points : "-");
     }
 
