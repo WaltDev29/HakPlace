@@ -145,12 +145,11 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="10dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
                             android:orientation="horizontal">
                             
                             <TextView
@@ -242,9 +241,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="20dp"
@@ -267,25 +266,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
+                        android:lineSpacingExtra="4dp"
                         android:textColor="@color/on_surface_variant"
                         android:textSize="13sp"
-                        android:lineSpacingExtra="4dp"
                         tools:text="이번 주는 전반적으로 만족도가 높은 편이에요!" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#10000000"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="#10000000" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
                         android:text="📈 변화 추이"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp" />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvTrendAnalysis"
                         android:layout_width="match_parent"
@@ -298,11 +298,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
                         android:text="🏆 베스트 식단"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp" />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvBestMeal"
                         android:layout_width="match_parent"
@@ -315,11 +316,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
                         android:text="🛠 개선 포인트"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp" />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvImprovementPoints"
                         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -86,17 +87,23 @@ public class StatisticsActivity extends AppCompatActivity {
         lineChart.setDrawGridBackground(false);
         lineChart.setTouchEnabled(true);
         lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
+        lineChart.setScaleEnabled(false);
         lineChart.setPinchZoom(false);
+        lineChart.setDoubleTapToZoomEnabled(false);
+        lineChart.setExtraBottomOffset(5f);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.parseColor("#40493D"));
+        xAxis.setGranularity(1f);
+        xAxis.setCenterAxisLabels(false);
+        xAxis.setYOffset(15f);
 
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getAxisLeft().setAxisMinimum(0f);
         lineChart.getAxisLeft().setAxisMaximum(5f);
+        lineChart.getAxisLeft().setGranularity(1f);
         lineChart.getAxisLeft().setTextColor(Color.parseColor("#40493D"));
         lineChart.getLegend().setEnabled(false);
     }
@@ -196,7 +203,14 @@ public class StatisticsActivity extends AppCompatActivity {
             WeeklyGraphData item = data.get(i);
             float val = item.avg_rating != null ? item.avg_rating.floatValue() : 0f;
             entries.add(new Entry(i, val));
-            labels.add(item.label);
+
+            String dateLabel = item.label;
+            if (item.date != null && item.date.length() >= 10) {
+                String dayPart = item.date.substring(8, 10);
+                dateLabel += " " + dayPart;
+            }
+            labels.add(dateLabel);
+
             if (item.avg_rating != null) {
                 total += item.avg_rating;
                 count++;
@@ -233,16 +247,27 @@ public class StatisticsActivity extends AppCompatActivity {
         dataSet.setColor(Color.parseColor("#2E7D32"));
         dataSet.setCircleColor(Color.parseColor("#2E7D32"));
         dataSet.setLineWidth(2f);
-        dataSet.setCircleRadius(4f);
+        dataSet.setCircleRadius(6f);
         dataSet.setDrawCircleHole(false);
-        dataSet.setValueTextSize(10f);
-        dataSet.setDrawFilled(true);
-        dataSet.setFillColor(Color.parseColor("#2E7D32"));
-        dataSet.setFillAlpha(30);
+        dataSet.setValueTextSize(15f);
+        dataSet.setDrawFilled(false);
+
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format(Locale.getDefault(), "%.1f", value);
+            }
+        });
 
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
-        lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setLabelCount(labels.size());
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum(labels.size() - 0.5f);
+
         lineChart.invalidate();
     }
 
@@ -276,7 +301,8 @@ public class StatisticsActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.item_top_food, containerTopFoods, false);
             ((TextView) view.findViewById(R.id.tvRank)).setText(String.valueOf(i + 1));
             ((TextView) view.findViewById(R.id.tvFoodName)).setText(food.name);
-            ((TextView) view.findViewById(R.id.tvFoodRating)).setText(String.format(Locale.getDefault(), "%.1f", food.avg_rating));
+            ((TextView) view.findViewById(R.id.tvFoodRating))
+                    .setText(String.format(Locale.getDefault(), "%.1f", food.avg_rating));
             containerTopFoods.addView(view);
         }
     }
@@ -294,7 +320,8 @@ public class StatisticsActivity extends AppCompatActivity {
                         monday.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                         targetValue = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(monday.getTime());
                     } else {
-                        targetValue = new SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(currentCalendar.getTime());
+                        targetValue = new SimpleDateFormat("yyyy-MM", Locale.getDefault())
+                                .format(currentCalendar.getTime());
                     }
 
                     for (StatisticResponse stat : stats) {
