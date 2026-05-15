@@ -1,5 +1,6 @@
 package kr.ac.waltdev29.hakplace;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +70,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             Glide.with(holder.itemView.getContext())
                     .load(fullUrl)
                     .into(holder.ivReviewPhoto);
+
+            String finalUrl = fullUrl;
+            holder.ivReviewPhoto.setOnClickListener(v -> {
+                Intent intent = new Intent(holder.itemView.getContext(), ImageDetailActivity.class);
+                intent.putExtra("image_url", finalUrl);
+                holder.itemView.getContext().startActivity(intent);
+            });
         } else {
             holder.ivReviewPhoto.setVisibility(View.GONE);
+            holder.ivReviewPhoto.setOnClickListener(null);
         }
 
         // Like count is not in the API yet, removed for now to fix build error
