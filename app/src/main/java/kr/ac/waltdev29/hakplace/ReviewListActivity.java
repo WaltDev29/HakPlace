@@ -99,6 +99,8 @@ public class ReviewListActivity extends AppCompatActivity {
             isMyReviewsMode = true;
             studentIdFilter = getIntent().getStringExtra("student_id");
             setupMyReviewsUI();
+            currentStartDate = null;
+            currentEndDate = null;
         }
 
         updateDateDisplay();
@@ -155,6 +157,7 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         btnAllPeriod.setOnClickListener(v -> {
+            currentStartDate = null;
             currentEndDate = null;
             btnDateRange.setText(getString(R.string.all_period_select));
 
