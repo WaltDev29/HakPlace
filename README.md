@@ -1,4 +1,4 @@
-# HakPlace (학식 앱) 🍱
+# HakPlace 🍱
 
 <p align="center">
     <img width="400" alt="Splash Content Container" src="https://github.com/user-attachments/assets/b5992045-be97-4a71-829d-60eea86a8d17" />
