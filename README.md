@@ -1,5 +1,9 @@
 # HakPlace (학식 앱) 🍱
 
+<p align="center">
+    <img width="400" alt="Splash Content Container" src="https://github.com/user-attachments/assets/b5992045-be97-4a71-829d-60eea86a8d17" />
+</p>
+
 > **"오늘 학식 뭐 나오지? 맛은 어떨까?"**  
 > 대학 생활의 중심인 학식을 스마트하게 즐기는 방법, HakPlace입니다.
 
@@ -11,7 +15,7 @@ HakPlace는 대학생들을 위한 맞춤형 **학식 조회 및 리뷰 공유 A
 
 | 오늘 학식 | 이번주 학식 | 리뷰 목록 | 평점 통계 |
 | :---: | :---: | :---: | :---: |
-| <img src="" width="200"> | <img src="" width="200"> | <img src="" width="200"> | <img src="" width="200"> |
+| <img width="200" alt="image" src="https://github.com/user-attachments/assets/f985764f-24d3-4294-93d9-1838c960bb8b" /> | <img width="200" alt="Screenshot_20260516_135629" src="https://github.com/user-attachments/assets/76603b81-add4-4ddb-9b6b-8bd93292b570" /> | <img width="200" alt="Screenshot_20260516_135719" src="https://github.com/user-attachments/assets/6f8426f3-e57f-4890-8340-c0aa8c514072" /> | <img width="200" alt="Screenshot_20260516_135647" src="https://github.com/user-attachments/assets/2039e6ca-f83b-4014-ba1a-6a4c45eb546b" /> |
 
 
 ## 🚀 주요 기능
