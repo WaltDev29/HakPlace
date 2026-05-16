@@ -83,20 +83,8 @@ app/src/main
 - Android Studio Iguana 이상 권장
 - Android SDK API Level 26 (Oreo) 이상
 
-### 설정 방법
-
-1. **저장소 클론**
-   ```bash
-   git clone https://github.com/your-repo/HakPlace.git
-   ```
-
-2. **환경 변수 설정**
-   - 프로젝트 루트 디렉토리에 `local.properties.template` 파일을 참고하여 `local.properties` 파일을 생성합니다.
-
-3. **빌드 및 실행**
-   - Android Studio에서 프로젝트를 엽니다.
-   - Gradle Sync 완료 후 에뮬레이터 또는 실기기에서 실행합니다.
-
+### 설치 방법
+최신 버전을 다운로드하세요. 👉 [Release](https://github.com/WaltDev29/HakPlace/releases)
 
 ## 🤝 기여하기
-버그 리포트나 기능 제안은 Issue 탭을 통해 언제든지 환영합니다!
+버그 리포트나 기능 제안은 Issue 탭을 통해 언제든지 환영합니다!  
