@@ -4,4 +4,5 @@ public class WeeklyAIComment {
     public String ai_analysis;
     public String trend_analysis;
     public String key_feedback;
+    public String best_meal;
 }
