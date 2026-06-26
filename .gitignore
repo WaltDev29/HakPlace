@@ -17,3 +17,7 @@ local.properties
 .vscode/
 .github/
 .env
+
+# Keystore files
+*.jks
+*.keystore

@@ -81,7 +81,7 @@
 
     <!-- My Page -->
     <string name="mypage_app_info">앱 정보</string>
-    <string name="mypage_app_info_msg">학플(HakPlace) v1.0.0\n학생들을 위한 학식 정보 서비스입니다.\n\n문의: waltdev29@gmail.com</string>
+    <string name="mypage_app_info_msg">학플(HakPlace) v%1$s\n학생들을 위한 학식 정보 서비스입니다.\n\n문의: waltdev29@gmail.com</string>
 
     <!-- Statistics -->
     <string name="error_graph_load">그래프 데이터를 불러올 수 없습니다.</string>

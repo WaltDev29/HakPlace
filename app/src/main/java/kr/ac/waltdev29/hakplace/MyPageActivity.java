@@ -72,7 +72,7 @@ public class MyPageActivity extends AppCompatActivity {
                     this,
                     R.drawable.ic_help,
                     getString(R.string.mypage_app_info),
-                    getString(R.string.mypage_app_info_msg),
+                    getString(R.string.mypage_app_info_msg, BuildConfig.VERSION_NAME),
                     null
             );
         });
