@@ -29,3 +29,9 @@
 
 # AndroidX Security Crypto
 -keepclassmembers class * extends androidx.security.crypto.MasterKey { *; }
+
+# WorkManager
+-keep class kr.ac.waltdev29.hakplace.worker.** { *; }
+-keep class * extends androidx.work.Worker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
+}
