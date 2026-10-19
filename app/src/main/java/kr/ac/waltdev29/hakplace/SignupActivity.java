@@ -91,8 +91,8 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        if (studentId.length() != 10) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "학번 10자리를 정확히 입력해 주세요.", null);
+        if (!studentId.matches("^\\d{10}$")) {
+            DialogHelper.showNotificationDialog(this, "입력 오류", "학번은 10자리 숫자로 입력해 주세요.", null);
             return;
         }
 
@@ -101,8 +101,10 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        if (password.length() < 8) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호는 영문, 숫자 포함 8자 이상이어야 합니다.", null);
+        // 영문과 숫자를 반드시 포함하여 8자 이상인지 정규식 검증
+        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$";
+        if (!password.matches(passwordPattern)) {
+            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호는 영문과 숫자를 모두 포함하여 8자 이상이어야 합니다.", null);
             return;
         }
 

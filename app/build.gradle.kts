@@ -52,7 +52,8 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -74,6 +75,9 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     
+    // Security
+    implementation(libs.security.crypto)
+
     // Networking
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

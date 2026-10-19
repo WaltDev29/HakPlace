@@ -1,10 +1,10 @@
 package kr.ac.waltdev29.hakplace;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 
 public class TitleActivity extends AppCompatActivity {
 
@@ -24,9 +24,9 @@ public class TitleActivity extends AppCompatActivity {
     }
 
     private void checkAuthAndNavigate() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
-        boolean isAutoLogin = prefs.getBoolean("auto_login", false);
+        TokenManager tokenManager = TokenManager.getInstance(this);
+        String token = tokenManager.getAccessToken();
+        boolean isAutoLogin = tokenManager.isAutoLogin();
 
         if (token != null && !token.isEmpty() && isAutoLogin) {
             // Validate token
@@ -65,7 +65,6 @@ public class TitleActivity extends AppCompatActivity {
     }
 
     private void clearToken() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        prefs.edit().remove("access_token").remove("auto_login").apply();
+        TokenManager.getInstance(this).clearAuth();
     }
 }

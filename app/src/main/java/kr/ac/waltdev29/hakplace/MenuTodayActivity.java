@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import kr.ac.waltdev29.hakplace.utils.DialogHelper;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 
 public class MenuTodayActivity extends AppCompatActivity {
 
@@ -129,8 +130,8 @@ public class MenuTodayActivity extends AppCompatActivity {
     }
 
     private void fetchUserInfo() {
-        android.content.SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
+        TokenManager tokenManager = TokenManager.getInstance(this);
+        String token = tokenManager.getAccessToken();
         if (token == null)
             return;
 
@@ -139,9 +140,7 @@ public class MenuTodayActivity extends AppCompatActivity {
             public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call,
                     Response<kr.ac.waltdev29.hakplace.api.models.UserInfo> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    android.content.SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("student_id", response.body().student_id);
-                    editor.apply();
+                    tokenManager.saveStudentId(response.body().student_id);
                 }
             }
 
@@ -284,8 +283,7 @@ public class MenuTodayActivity extends AppCompatActivity {
             }
 
             // 2. 중복 작성 체크 (API 호출)
-            android.content.SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-            String studentId = prefs.getString("student_id", null);
+            String studentId = TokenManager.getInstance(this).getStudentId();
 
             if (studentId == null) {
                 // 정보가 없으면 즉시 동기화 시도 후 안내

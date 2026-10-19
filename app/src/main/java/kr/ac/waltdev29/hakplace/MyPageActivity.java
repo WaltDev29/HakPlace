@@ -1,7 +1,7 @@
 package kr.ac.waltdev29.hakplace;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -34,8 +34,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         apiService = ApiClient.getClient().create(ApiService.class);
 
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        token = prefs.getString("access_token", null);
+        token = TokenManager.getInstance(this).getAccessToken();
 
         tvUserName = findViewById(R.id.tvUserName);
         tvUserDetail = findViewById(R.id.tvUserDetail);
@@ -114,11 +113,7 @@ public class MyPageActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("access_token");
-        editor.putBoolean("auto_login", false);
-        editor.apply();
+        TokenManager.getInstance(this).clearAll();
 
         Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);

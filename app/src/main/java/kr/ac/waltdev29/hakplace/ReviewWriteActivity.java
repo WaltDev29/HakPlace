@@ -1,6 +1,6 @@
 package kr.ac.waltdev29.hakplace;
 
-import android.content.SharedPreferences;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -169,8 +169,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             review.photo_base64 = photoBase64;
         }
 
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
+        String token = TokenManager.getInstance(this).getAccessToken();
 
         if (token == null) {
             Toast.makeText(this, getString(R.string.msg_login_required), Toast.LENGTH_SHORT).show();

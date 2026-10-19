@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import android.content.SharedPreferences;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 import kr.ac.waltdev29.hakplace.api.ApiClient;
 import kr.ac.waltdev29.hakplace.api.ApiService;
 import kr.ac.waltdev29.hakplace.api.models.DailyMeals;
@@ -166,17 +166,15 @@ public class MenuWeekActivity extends AppCompatActivity {
     }
 
     private void fetchUserInfo() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
+        TokenManager tokenManager = TokenManager.getInstance(this);
+        String token = tokenManager.getAccessToken();
         if (token == null) return;
 
         apiService.getMe("Bearer " + token).enqueue(new Callback<kr.ac.waltdev29.hakplace.api.models.UserInfo>() {
             @Override
             public void onResponse(Call<kr.ac.waltdev29.hakplace.api.models.UserInfo> call, Response<kr.ac.waltdev29.hakplace.api.models.UserInfo> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("student_id", response.body().student_id);
-                    editor.apply();
+                    tokenManager.saveStudentId(response.body().student_id);
                 }
             }
 
@@ -376,8 +374,7 @@ public class MenuWeekActivity extends AppCompatActivity {
             }
 
             // 2. 중복 작성 체크 (API 호출)
-            SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-            String studentId = prefs.getString("student_id", null);
+            String studentId = TokenManager.getInstance(this).getStudentId();
 
             if (studentId == null) {
                 fetchUserInfo();
