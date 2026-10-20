@@ -60,7 +60,7 @@ public class MyPageActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnMyReviews.setOnClickListener(v -> {
             if (studentId == null) {
-                Toast.makeText(this, "사용자 정보를 불러오는 중입니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.user_info_loading), Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(this, ReviewListActivity.class);
@@ -82,7 +82,7 @@ public class MyPageActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(v -> {
-            DialogHelper.showConfirmDialog(this, "로그아웃", "정말 로그아웃 하시겠습니까?", new DialogHelper.OnDialogListener() {
+            DialogHelper.showConfirmDialog(this, getString(R.string.logout), getString(R.string.logout_confirm_msg), new DialogHelper.OnDialogListener() {
                 @Override
                 public void onConfirm() {
                     logout();
@@ -164,8 +164,8 @@ public class MyPageActivity extends AppCompatActivity {
     private void promptEnableSystemNotification() {
         DialogHelper.showConfirmDialog(
                 this,
-                "알림 권한 필요",
-                "기기 설정에서 HakPlace 알림이 차단되어 있습니다.\n설정 화면으로 이동하여 알림을 허용하시겠습니까?",
+                getString(R.string.notification_permission_required_title),
+                getString(R.string.notification_permission_required_msg),
                 new DialogHelper.OnDialogListener() {
                     @Override
                     public void onConfirm() {
@@ -189,13 +189,13 @@ public class MyPageActivity extends AppCompatActivity {
                     tvUserName.setText(userInfo.name);
                     tvUserDetail.setText(studentId);
                 } else {
-                    Toast.makeText(MyPageActivity.this, "사용자 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyPageActivity.this, getString(R.string.user_info_error), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
-                Toast.makeText(MyPageActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyPageActivity.this, getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -203,7 +203,7 @@ public class MyPageActivity extends AppCompatActivity {
     private void logout() {
         TokenManager.getInstance(this).clearAll();
 
-        Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.logout_success), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

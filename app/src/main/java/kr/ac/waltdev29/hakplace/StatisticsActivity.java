@@ -151,14 +151,14 @@ public class StatisticsActivity extends AppCompatActivity {
     private void updatePeriodDisplay() {
         SimpleDateFormat sdf;
         if (isWeekly) {
-            sdf = new SimpleDateFormat("MM월 dd일", Locale.KOREA);
+            sdf = new SimpleDateFormat(getString(R.string.date_format_stat_weekly), Locale.getDefault());
             Calendar start = (Calendar) currentCalendar.clone();
             start.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             Calendar end = (Calendar) start.clone();
             end.add(Calendar.DATE, 6);
             tvPeriodRange.setText(sdf.format(start.getTime()) + " ~ " + sdf.format(end.getTime()));
         } else {
-            sdf = new SimpleDateFormat("yyyy년 MM월", Locale.KOREA);
+            sdf = new SimpleDateFormat(getString(R.string.date_format_stat_monthly), Locale.getDefault());
             tvPeriodRange.setText(sdf.format(currentCalendar.getTime()));
         }
     }

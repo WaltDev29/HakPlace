@@ -1,0 +1,187 @@
+<resources>
+    <string name="app_name">Hakplace</string>
+    <string name="splash_slogan">食事がもっと楽しくなる、ハクプル</string>
+    
+    <!-- Login Page -->
+    <string name="login_slogan">食事がもっと楽しくなる、ハクプル</string>
+    <string name="student_id_label">学籍番号</string>
+    <string name="student_id_hint">学籍番号を入力してください</string>
+    <string name="password_label">パスワード</string>
+    <string name="password_hint">パスワードを入力してください</string>
+    <string name="login_button">ログイン</string>
+    <string name="auto_login">自動ログイン</string>
+    <string name="find_password">パスワードをお忘れの方</string>
+    <string name="no_account_prompt">アカウントをお持ちでないですか？</string>
+    <string name="signup_button">会員登録</string>
+    
+    <!-- Signup Page -->
+    <string name="signup_title">会員登録</string>
+    <string name="name_label">お名前</string>
+    <string name="name_hint">お名前を入力してください</string>
+    <string name="student_id_hint_signup">10桁の学籍番号を入力してください</string>
+    <string name="birth_date_label">生年月日</string>
+    <string name="birth_date_hint">YYYY-MM-DD</string>
+    <string name="phone_label">電話番号</string>
+    <string name="phone_hint">010-0000-0000</string>
+    <string name="gender_label">性別</string>
+    <string name="gender_male">男性</string>
+    <string name="gender_female">女性</string>
+
+    <string name="password_confirm_label">パスワード確認</string>
+    <string name="password_confirm_hint">パスワードをもう一度入力してください</string>
+    <string name="password_hint_text">パスワードは英字、数字、特殊文字を含む8文字以上で設定してください。</string>
+    <string name="cancel_button">キャンセル</string>
+    <string name="policy_text">登録すると、Hakplaceの利用規約およびプライバシーポリシーに同意したことになります。</string>
+
+    <!-- Main Page (Today's Menu) -->
+    <string name="main_title">今日の学食</string>
+    <string name="breakfast">朝食</string>
+    <string name="lunch">昼食</string>
+    <string name="dinner">夕食</string>
+    <string name="breakfast_time">08:00 ~ 09:30</string>
+    <string name="lunch_time">11:30 ~ 13:30</string>
+    <string name="dinner_time">17:00 ~ 18:30</string>
+    <string name="tab_today">今日の学食</string>
+    <string name="tab_weekly">今週の学食</string>
+    <string name="tab_stats">評価・統計</string>
+    <string name="tab_review">レビュー</string>
+    <string name="tab_mypage">マイページ</string>
+
+    <!-- Weekly Menu -->
+    <string name="weekly_menu_title">今週の学食</string>
+    <string name="mon">月</string>
+    <string name="tue">火</string>
+    <string name="wed">水</string>
+    <string name="thu">木</string>
+    <string name="fri">金</string>
+
+    <!-- Meal Detail Popup -->
+    <string name="write_review">レビューを書く</string>
+    <string name="view_reviews">みんなのレビューを見る</string>
+    <string name="review_count_format">(%d件の評価)</string>
+    <string name="no_meal_info">献立情報がありません。</string>
+    <string name="meal_label">献立</string>
+
+    <!-- Review Write -->
+    <string name="review_write_title">レビュー作成</string>
+    <string name="rating_label">評価</string>
+    <string name="review_comment_label">レビュー (任意)</string>
+    <string name="photo_add_label">写真を追加 (任意)</string>
+    <string name="submit_review">投稿する</string>
+    <string name="review_disclaimer">登録した評価は修正・削除できません。</string>
+    <string name="review_info_msg">レビューは当日の食事時間から作成できます。</string>
+    <string name="review_comment_hint">ピリ辛で美味しかったです！お肉も柔らかかったです。</string>
+    <string name="msg_select_rating">評価を選択してください。</string>
+    <string name="msg_review_registered">レビューが登録されました。</string>
+    <string name="msg_login_required">ログインが必要です。</string>
+    <string name="msg_wrong_access">不正なアクセスです。</string>
+    <string name="msg_network_error">ネットワークエラー</string>
+    <string name="msg_preparing">準備中の機能です。</string>
+
+    <!-- My Page -->
+    <string name="mypage_app_info">アプリ情報</string>
+    <string name="mypage_app_info_msg">学食情報アプリ HakPlace v%1$s\n学生のための学食情報サービスです。\n\nお問い合わせ: waltdev29@gmail.com</string>
+
+    <!-- Statistics -->
+    <string name="error_graph_load">グラフデータを読み込めませんでした。</string>
+    <string name="stat_rating_label">評価</string>
+    <string name="no_ai_analysis">分析データが存在しません。</string>
+    <string name="no_data">データがありません。</string>
+    <string name="unit_points">点</string>
+
+    <!-- Review List -->
+    <string name="period_select">期間選択</string>
+    <string name="all_period_select">全期間 (日付選択)</string>
+    <string name="sort_newest">最新順</string>
+    <string name="sort_rating_high">評価が高い順</string>
+    <string name="sort_rating_low">評価が低い順</string>
+    <string name="my_reviews">マイレビュー</string>
+    <string name="error_review_load">レビューを読み込めませんでした。</string>
+    <string name="no_reviews">登録されたレビューがありません。</string>
+
+    <!-- Menu Today -->
+    <string name="info_not_found">情報なし</string>
+    <string name="error_meal_load">献立情報を読み込めませんでした。</string>
+    <string name="review_restricted_title">レビュー作成制限</string>
+    <string name="review_restricted_today_msg">当日の献立のみレビューを作成できます。</string>
+    <string name="review_time_guide_title">%s レビュー時間案内</string>
+    <string name="review_time_guide_msg">%1$sのレビューは%2$sから作成可能です。</string>
+    <string name="checking_info">情報確認中</string>
+    <string name="syncing_user_info">ユーザー情報を同期しています。少々お待ちください。</string>
+    <string name="duplicate_review_title">重複作成制限</string>
+    <string name="duplicate_review_msg">この献立にはすでにレビューを投稿済みです。</string>
+    <string name="status_check_failed">状態確認失敗</string>
+
+    <!-- Common Messages & Dialogs -->
+    <string name="input_error">入力エラー</string>
+    <string name="login_input_prompt">学籍番号とパスワードを入力してください。</string>
+    <string name="login_failed">ログイン失敗</string>
+    <string name="login_failed_msg">ログイン失敗: 入力情報を確認してください。</string>
+    <string name="connection_failed">接続失敗</string>
+    <string name="connection_failed_msg">サーバーへの接続に失敗しました: %s</string>
+    <string name="msg_confirm_review_submit">作成したレビューを投稿しますか？</string>
+    <string name="dialog_confirm">確認</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <string name="dialog_close">閉じる</string>
+    <string name="dialog_default_notice">お知らせ</string>
+
+    <!-- Notification Settings & Messages -->
+    <string name="notification_settings_title">学食通知設定</string>
+    <string name="system_notification_disabled_title">⚠️ 端末の通知が無効になっています</string>
+    <string name="system_notification_disabled_msg">スマートフォンの設定で通知を許可すると、学食メニューの通知を正常に受け取ることができます。</string>
+    <string name="btn_go_system_settings">端末の通知設定へ移動</string>
+    <string name="notify_daily_all_title">今日の学食まとめ通知 (午前 08:00)</string>
+    <string name="notify_lunch_title">昼食メニュー通知 (午前 11:30)</string>
+    <string name="notify_dinner_title">夕食メニュー通知 (午後 05:30)</string>
+    <string name="notification_permission_required_title">通知権限が必要です</string>
+    <string name="notification_permission_required_msg">端末の設定でHakPlaceの通知が無効になっています。\n設定画面へ移動して通知を許可しますか？</string>
+    
+    <!-- Notification Helper -->
+    <string name="notif_channel_name">学食通知</string>
+    <string name="notif_channel_desc">毎朝の学食まとめ、および昼食・夕食メニューの通知を受け取ります。</string>
+    <string name="notif_daily_all_title">🍱 %s 今日の学食メニュー</string>
+    <string name="notif_breakfast_label">🌅 [朝食]</string>
+    <string name="notif_lunch_label">☀️ [昼食]</string>
+    <string name="notif_dinner_label">🌙 [夕食]</string>
+    <string name="notif_no_service">営業なし</string>
+    <string name="notif_daily_all_summary">朝食・昼食・夕食のメニューをご確認ください！</string>
+    <string name="notif_daily_all_summary_lunch">昼食のメイン: %s</string>
+    <string name="notif_lunch_title">☀️ 今日の昼食メニューが届きました！</string>
+    <string name="notif_lunch_no_service">本日の昼食営業はありません。</string>
+    <string name="notif_dinner_title">🌙 今日の夕食メニューが届きました！</string>
+    <string name="notif_dinner_no_service">本日の夕食営業はありません。</string>
+    <string name="notif_rating_format">⭐ 平均評価: %.1f / 5.0</string>
+
+    <!-- MyPage & Auth -->
+    <string name="logout">ログアウト</string>
+    <string name="logout_confirm_msg">本当にログアウトしますか？</string>
+    <string name="logout_success">ログアウトしました。</string>
+    <string name="user_info_loading">ユーザー情報を読み込み中...</string>
+    <string name="user_info_error">ユーザー情報を取得できませんでした。</string>
+    <string name="signup_success">会員登録が完了しました！ログインしてください。</string>
+    <string name="signup_fail">登録失敗</string>
+    <string name="signup_fail_exist">会員登録失敗: 既に登録されている学籍番号か、不正なリクエストです。</string>
+    <string name="validation_student_id">学籍番号は10桁の数字で入力してください。</string>
+    <string name="validation_password">パスワードは英字と数字を両方含む8文字以上で設定してください。</string>
+    <string name="validation_all_fields">すべての情報を入力してください。</string>
+    <string name="validation_password_mismatch">パスワードが一致しません。</string>
+    <string name="image_process_error">画像の処理中にエラーが発生しました。</string>
+
+    <!-- Statistics -->
+    <string name="stat_weekly">週別</string>
+    <string name="stat_monthly">月別</string>
+    <string name="stat_top_foods">メニュー別評価 TOP 3</string>
+    <string name="stat_ai_analysis">AI分析コメント</string>
+    <string name="stat_trend">📈 変化の推移</string>
+    <string name="stat_best_meal">🏆 ベスト献立</string>
+    <string name="stat_key_points">📌 キーポイント</string>
+
+    <!-- Additional Common & Date Formats -->
+    <string name="filter_all">全て</string>
+    <string name="system_error_title">システムエラー</string>
+    <string name="date_format_notification">M月d日(E)</string>
+    <string name="date_format_menu">M月d日(E)</string>
+    <string name="date_format_month_day">M月d日</string>
+    <string name="date_format_stat_weekly">MM月dd日</string>
+    <string name="date_format_stat_monthly">yyyy年MM月</string>
+</resources>

@@ -107,6 +107,6 @@ public class DialogHelper {
      * 시스템 오류 등 치명적 에러용 (확인 시 Activity 종료 가능)
      */
     public static void showSystemErrorDialog(android.app.Activity activity, String message) {
-        showNotificationDialog(activity, R.drawable.ic_close, "시스템 오류", message, activity::finish);
+        showNotificationDialog(activity, R.drawable.ic_close, activity.getString(R.string.system_error_title), message, activity::finish);
     }
 }

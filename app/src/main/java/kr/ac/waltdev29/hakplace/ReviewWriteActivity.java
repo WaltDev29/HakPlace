@@ -92,7 +92,12 @@ public class ReviewWriteActivity extends AppCompatActivity {
         ivSelectedPhoto = findViewById(R.id.ivSelectedPhoto);
         icCamera = findViewById(R.id.icCamera);
 
-        tvMealInfo.setText(mealType + " " + date);
+        String displayMealType = mealType;
+        if ("조식".equals(mealType)) displayMealType = getString(R.string.breakfast);
+        else if ("중식".equals(mealType)) displayMealType = getString(R.string.lunch);
+        else if ("석식".equals(mealType)) displayMealType = getString(R.string.dinner);
+
+        tvMealInfo.setText(displayMealType + " " + date);
         tvRatingValue.setText("1.0 / 5.0");
     }
 
@@ -226,7 +231,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
                 photoBase64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
             }
         } catch (Exception e) {
-            Toast.makeText(this, "이미지를 처리하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.image_process_error), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

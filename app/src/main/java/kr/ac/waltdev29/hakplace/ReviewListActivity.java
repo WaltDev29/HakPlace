@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 public class ReviewListActivity extends AppCompatActivity {
 
     private RecyclerView rvReviews;
+    private TextView tvEmptyReview;
     private ReviewAdapter adapter;
     private ApiService apiService;
     private android.widget.Button btnSort;
@@ -63,6 +65,7 @@ public class ReviewListActivity extends AppCompatActivity {
         apiService = ApiClient.getClient().create(ApiService.class);
 
         rvReviews = findViewById(R.id.rvReviews);
+        tvEmptyReview = findViewById(R.id.tvEmptyReview);
         btnSort = findViewById(R.id.btnSort);
         btnDateRange = findViewById(R.id.btnDateRange);
         btnAllPeriod = findViewById(R.id.btnAllPeriod);
@@ -300,6 +303,14 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         adapter.setReviews(displayList);
+
+        if (displayList.isEmpty()) {
+            tvEmptyReview.setVisibility(View.VISIBLE);
+            rvReviews.setVisibility(View.GONE);
+        } else {
+            tvEmptyReview.setVisibility(View.GONE);
+            rvReviews.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupBottomNav() {

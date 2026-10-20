@@ -103,9 +103,9 @@ public class MenuWeekActivity extends AppCompatActivity {
     }
 
     private void setupMealCards() {
-        updateCardHeader(cardBreakfast, "조식", R.drawable.ic_sun_blue, "08:00 ~ 09:30");
-        updateCardHeader(cardLunch, "중식", R.drawable.ic_sun, "11:30 ~ 13:30");
-        updateCardHeader(cardDinner, "석식", R.drawable.ic_dinner, "17:00 ~ 18:30");
+        updateCardHeader(cardBreakfast, getString(R.string.breakfast), R.drawable.ic_sun_blue, "08:00 ~ 09:30");
+        updateCardHeader(cardLunch, getString(R.string.lunch), R.drawable.ic_sun, "11:30 ~ 13:30");
+        updateCardHeader(cardDinner, getString(R.string.dinner), R.drawable.ic_dinner, "17:00 ~ 18:30");
     }
 
     private void updateCardHeader(View card, String title, int iconRes, String time) {
@@ -196,7 +196,7 @@ public class MenuWeekActivity extends AppCompatActivity {
             Date firstDate = inputFormat.parse(weekMeals.get(0).date);
             Date lastDate = inputFormat.parse(weekMeals.get(weekMeals.size() - 1).date);
 
-            SimpleDateFormat rangeFormat = new SimpleDateFormat("M월 d일", Locale.KOREAN);
+            SimpleDateFormat rangeFormat = new SimpleDateFormat(getString(R.string.date_format_month_day), Locale.getDefault());
             tvWeekRange.setText(rangeFormat.format(firstDate) + " ~ " + rangeFormat.format(lastDate));
 
             for (int i = 0; i < weekMeals.size() && i < 5; i++) {
@@ -326,13 +326,13 @@ public class MenuWeekActivity extends AppCompatActivity {
         String tempDateStr;
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            SimpleDateFormat outputFormat = new SimpleDateFormat("M/d (E)", Locale.KOREAN);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("M/d (E)", Locale.getDefault());
             tempDateStr = outputFormat.format(inputFormat.parse(date));
         } catch (Exception e) {
             tempDateStr = date;
         }
         final String dateStr = tempDateStr;
-        tvTitle.setText(mealType + " " + dateStr);
+        tvTitle.setText(getMealTypeDisplayName(mealType) + " " + dateStr);
 
         tvRating.setText(String.format(Locale.getDefault(), "%.1f", meal.avg_rating));
         tvReviewCount.setText(
@@ -361,13 +361,13 @@ public class MenuWeekActivity extends AppCompatActivity {
                 sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
                 String today = sdf.format(new Date());
 
-                String title = "리뷰 작성 제한";
+                String title = getString(R.string.review_restricted_title);
                 String msg;
                 if (!today.equals(date)) {
-                    msg = "당일 식단만 리뷰를 작성할 수 있습니다.";
+                    msg = getString(R.string.review_restricted_today_msg);
                 } else {
-                    title = mealType + " 리뷰 시간 안내";
-                    msg = mealType + " 리뷰는 " + startTime + "부터 작성 가능합니다.";
+                    title = String.format(Locale.getDefault(), getString(R.string.review_time_guide_title), getMealTypeDisplayName(mealType));
+                    msg = String.format(Locale.getDefault(), getString(R.string.review_time_guide_msg), getMealTypeDisplayName(mealType), startTime);
                 }
                 DialogHelper.showNotificationDialog(this, title, msg, null);
                 return;
@@ -378,7 +378,7 @@ public class MenuWeekActivity extends AppCompatActivity {
 
             if (studentId == null) {
                 fetchUserInfo();
-                DialogHelper.showNotificationDialog(this, "정보 확인 중", "사용자 정보를 동기화 중입니다. 잠시 후 다시 시도해주세요.", null);
+                DialogHelper.showNotificationDialog(this, getString(R.string.checking_info), getString(R.string.syncing_user_info), null);
                 return;
             }
 
@@ -389,7 +389,7 @@ public class MenuWeekActivity extends AppCompatActivity {
                     btnWrite.setEnabled(true);
                     if (response.isSuccessful() && response.body() != null) {
                         if (response.body().reviews != null && !response.body().reviews.isEmpty()) {
-                            DialogHelper.showNotificationDialog(MenuWeekActivity.this, "중복 작성 제한", "이미 이 식단에 리뷰를 작성하셨습니다.", null);
+                            DialogHelper.showNotificationDialog(MenuWeekActivity.this, getString(R.string.duplicate_review_title), getString(R.string.duplicate_review_msg), null);
                         } else {
                             android.content.Intent intent = new android.content.Intent(MenuWeekActivity.this, ReviewWriteActivity.class);
                             intent.putExtra("meal_id", meal.meal_id);
@@ -399,14 +399,14 @@ public class MenuWeekActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     } else {
-                        Toast.makeText(MenuWeekActivity.this, "상태 확인 실패", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuWeekActivity.this, getString(R.string.status_check_failed), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<kr.ac.waltdev29.hakplace.api.models.ReviewList> call, Throwable t) {
                     btnWrite.setEnabled(true);
-                    Toast.makeText(MenuWeekActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuWeekActivity.this, getString(R.string.msg_network_error), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -445,5 +445,12 @@ public class MenuWeekActivity extends AppCompatActivity {
             return currentTime >= 1730;
         }
         return false;
+    }
+
+    private String getMealTypeDisplayName(String mealType) {
+        if ("조식".equals(mealType)) return getString(R.string.breakfast);
+        if ("중식".equals(mealType)) return getString(R.string.lunch);
+        if ("석식".equals(mealType)) return getString(R.string.dinner);
+        return mealType;
     }
 }

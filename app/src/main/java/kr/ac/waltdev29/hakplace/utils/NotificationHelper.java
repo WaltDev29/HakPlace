@@ -40,10 +40,10 @@ public class NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    CHANNEL_NAME,
+                    context.getString(R.string.notif_channel_name),
                     NotificationManager.IMPORTANCE_HIGH
             );
-            channel.setDescription(CHANNEL_DESC);
+            channel.setDescription(context.getString(R.string.notif_channel_desc));
             channel.enableVibration(true);
 
             NotificationManager manager = context.getSystemService(NotificationManager.class);
@@ -86,9 +86,9 @@ public class NotificationHelper {
         return PendingIntent.getActivity(context, 0, intent, flags);
     }
 
-    private static String formatFoods(List<String> foods) {
+    private static String formatFoods(Context context, List<String> foods) {
         if (foods == null || foods.isEmpty()) {
-            return "운영 정보 없음";
+            return context.getString(R.string.notif_no_service);
         }
         return TextUtils.join(", ", foods);
     }
@@ -100,37 +100,38 @@ public class NotificationHelper {
         createNotificationChannel(context);
         if (!areNotificationsEnabled(context)) return;
 
-        String dateStr = new SimpleDateFormat("M월 d일 (E)", Locale.KOREAN).format(new Date());
-        String title = "🍱 " + dateStr + " 오늘의 학식 메뉴";
+        String datePattern = context.getString(R.string.date_format_notification);
+        String dateStr = new SimpleDateFormat(datePattern, Locale.getDefault()).format(new Date());
+        String title = context.getString(R.string.notif_daily_all_title, dateStr);
 
         StringBuilder sb = new StringBuilder();
         
-        sb.append("🌅 [조식]\n");
+        sb.append(context.getString(R.string.notif_breakfast_label)).append("\n");
         if (dailyMeals != null && dailyMeals.breakfast != null) {
-            sb.append(formatFoods(dailyMeals.breakfast.foods));
+            sb.append(formatFoods(context, dailyMeals.breakfast.foods));
         } else {
-            sb.append("운영 없음");
+            sb.append(context.getString(R.string.notif_no_service));
         }
         sb.append("\n\n");
 
-        sb.append("☀️ [중식]\n");
+        sb.append(context.getString(R.string.notif_lunch_label)).append("\n");
         if (dailyMeals != null && dailyMeals.lunch != null) {
-            sb.append(formatFoods(dailyMeals.lunch.foods));
+            sb.append(formatFoods(context, dailyMeals.lunch.foods));
         } else {
-            sb.append("운영 없음");
+            sb.append(context.getString(R.string.notif_no_service));
         }
         sb.append("\n\n");
 
-        sb.append("🌙 [석식]\n");
+        sb.append(context.getString(R.string.notif_dinner_label)).append("\n");
         if (dailyMeals != null && dailyMeals.dinner != null) {
-            sb.append(formatFoods(dailyMeals.dinner.foods));
+            sb.append(formatFoods(context, dailyMeals.dinner.foods));
         } else {
-            sb.append("운영 없음");
+            sb.append(context.getString(R.string.notif_no_service));
         }
 
-        String summaryText = "조식, 중식, 석식 메뉴를 확인해 보세요!";
+        String summaryText = context.getString(R.string.notif_daily_all_summary);
         if (dailyMeals != null && dailyMeals.lunch != null && dailyMeals.lunch.foods != null && !dailyMeals.lunch.foods.isEmpty()) {
-            summaryText = "점심 대표: " + dailyMeals.lunch.foods.get(0);
+            summaryText = context.getString(R.string.notif_daily_all_summary_lunch, dailyMeals.lunch.foods.get(0));
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -154,13 +155,13 @@ public class NotificationHelper {
         createNotificationChannel(context);
         if (!areNotificationsEnabled(context)) return;
 
-        String title = "☀️ 오늘의 점심 메뉴 도착!";
-        String content = (lunch != null) ? formatFoods(lunch.foods) : "금일 점심 운영이 없습니다.";
+        String title = context.getString(R.string.notif_lunch_title);
+        String content = (lunch != null) ? formatFoods(context, lunch.foods) : context.getString(R.string.notif_lunch_no_service);
 
         StringBuilder bigText = new StringBuilder();
         bigText.append(content);
         if (lunch != null && lunch.avg_rating > 0) {
-            bigText.append(String.format(Locale.KOREAN, "\n\n⭐ 평균 평점: %.1f / 5.0", lunch.avg_rating));
+            bigText.append(String.format(Locale.getDefault(), "\n\n" + context.getString(R.string.notif_rating_format), lunch.avg_rating));
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -184,13 +185,13 @@ public class NotificationHelper {
         createNotificationChannel(context);
         if (!areNotificationsEnabled(context)) return;
 
-        String title = "🌙 오늘의 저녁 메뉴 도착!";
-        String content = (dinner != null) ? formatFoods(dinner.foods) : "금일 저녁 운영이 없습니다.";
+        String title = context.getString(R.string.notif_dinner_title);
+        String content = (dinner != null) ? formatFoods(context, dinner.foods) : context.getString(R.string.notif_dinner_no_service);
 
         StringBuilder bigText = new StringBuilder();
         bigText.append(content);
         if (dinner != null && dinner.avg_rating > 0) {
-            bigText.append(String.format(Locale.KOREAN, "\n\n⭐ 평균 평점: %.1f / 5.0", dinner.avg_rating));
+            bigText.append(String.format(Locale.getDefault(), "\n\n" + context.getString(R.string.notif_rating_format), dinner.avg_rating));
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)

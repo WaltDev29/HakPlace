@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="마이페이지"
+                android:text="@string/tab_mypage"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -164,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
-                            android:text="내 리뷰"
+                            android:text="@string/my_reviews"
                             android:textColor="@color/on_surface"
                             android:textSize="16sp" />
 
@@ -215,7 +215,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
-                            android:text="식단 알림 설정"
+                            android:text="@string/notification_settings_title"
                             android:textColor="@color/on_surface"
                             android:textSize="16sp" />
 
@@ -323,7 +323,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
-                            android:text="로그아웃"
+                            android:text="@string/logout"
                             android:textColor="@color/on_surface"
                             android:textSize="16sp" />
 
