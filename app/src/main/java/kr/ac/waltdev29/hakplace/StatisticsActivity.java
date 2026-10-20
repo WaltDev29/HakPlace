@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -96,10 +97,12 @@ public class StatisticsActivity extends AppCompatActivity {
         lineChart.setDoubleTapToZoomEnabled(false);
         lineChart.setExtraBottomOffset(5f);
 
+        int labelColor = ContextCompat.getColor(this, R.color.on_surface);
+
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setTextColor(Color.parseColor("#40493D"));
+        xAxis.setTextColor(labelColor);
         xAxis.setGranularity(1f);
         xAxis.setCenterAxisLabels(false);
         xAxis.setYOffset(15f);
@@ -108,7 +111,7 @@ public class StatisticsActivity extends AppCompatActivity {
         lineChart.getAxisLeft().setAxisMinimum(0f);
         lineChart.getAxisLeft().setAxisMaximum(5f);
         lineChart.getAxisLeft().setGranularity(1f);
-        lineChart.getAxisLeft().setTextColor(Color.parseColor("#40493D"));
+        lineChart.getAxisLeft().setTextColor(labelColor);
         lineChart.getLegend().setEnabled(false);
     }
 
@@ -249,13 +252,17 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void renderChart(ArrayList<Entry> entries, ArrayList<String> labels) {
+        int primaryColor = ContextCompat.getColor(this, R.color.primary);
+        int valueColor = ContextCompat.getColor(this, R.color.on_surface);
+
         LineDataSet dataSet = new LineDataSet(entries, getString(R.string.stat_rating_label));
-        dataSet.setColor(Color.parseColor("#2E7D32"));
-        dataSet.setCircleColor(Color.parseColor("#2E7D32"));
+        dataSet.setColor(primaryColor);
+        dataSet.setCircleColor(primaryColor);
         dataSet.setLineWidth(2f);
         dataSet.setCircleRadius(6f);
         dataSet.setDrawCircleHole(false);
         dataSet.setValueTextSize(15f);
+        dataSet.setValueTextColor(valueColor);
         dataSet.setDrawFilled(false);
 
         dataSet.setValueFormatter(new ValueFormatter() {

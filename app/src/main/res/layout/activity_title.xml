@@ -18,12 +18,21 @@
         android:orientation="vertical">
 
         <!-- Logo Element -->
-        <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/logo_no_bg" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/white">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_no_bg" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Brand Text Content -->
         <TextView
