@@ -29,9 +29,26 @@
 
 # AndroidX Security Crypto
 -keepclassmembers class * extends androidx.security.crypto.MasterKey { *; }
+-keep class androidx.security.crypto.** { *; }
+-dontwarn androidx.security.crypto.**
+
+# AndroidX Startup
+-keep class androidx.startup.** { *; }
+-keep class * extends androidx.startup.Initializer { *; }
 
 # WorkManager
 -keep class kr.ac.waltdev29.hakplace.worker.** { *; }
 -keep class * extends androidx.work.Worker {
     public <init>(android.content.Context, androidx.work.WorkerParameters);
 }
+-keep class * extends androidx.work.ListenableWorker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
+}
+-keep class androidx.work.impl.WorkDatabase** { *; }
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
+-keep class androidx.work.impl.** { *; }
+-keep class androidx.work.** { *; }
+-keep class androidx.room.** { *; }
+-keepclassmembers class * extends androidx.room.RoomDatabase { *; }
+-dontwarn androidx.work.**
+-dontwarn androidx.room.**
