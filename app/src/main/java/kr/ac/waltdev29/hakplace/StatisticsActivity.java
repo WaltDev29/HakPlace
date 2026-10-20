@@ -372,92 +372,9 @@ public class StatisticsActivity extends AppCompatActivity {
         tvAiAnalysis.setText(comment.ai_analysis != null ? comment.ai_analysis : getString(R.string.no_data));
         tvTrendAnalysis.setText(comment.trend_analysis != null ? comment.trend_analysis : "-");
         
-        String bestMealStr = "-";
-        // Calculate best meal from graph data
-        if (isWeekly && currentWeeklyData != null && !currentWeeklyData.isEmpty()) {
-            WeeklyGraphData bestDay = null;
-            double maxRating = -1;
-            for (WeeklyGraphData d : currentWeeklyData) {
-                if (d.avg_rating != null && d.avg_rating > maxRating) {
-                    maxRating = d.avg_rating;
-                    bestDay = d;
-                }
-            }
-            if (bestDay != null && maxRating > 0) {
-                fetchAndDisplayBestMealDetails(bestDay.date, bestDay.label, maxRating);
-                return; // tvBestMeal will be updated in callback
-            }
-        } else if (!isWeekly && currentMonthlyData != null && !currentMonthlyData.isEmpty()) {
-            MonthlyGraphData bestWeek = null;
-            double maxRating = -1;
-            for (MonthlyGraphData d : currentMonthlyData) {
-                if (d.avg_rating != null && d.avg_rating > maxRating) {
-                    maxRating = d.avg_rating;
-                    bestWeek = d;
-                }
-            }
-            if (bestWeek != null && maxRating > 0) {
-                bestMealStr = bestWeek.label + " (" + String.format(Locale.getDefault(), "%.1f", maxRating) + getString(R.string.unit_points) + ")";
-            }
-        }
-        tvBestMeal.setText(bestMealStr);
+        tvBestMeal.setText(comment.best_meal != null ? comment.best_meal : "-");
 
         tvImprovementPoints.setText(comment.key_feedback != null ? comment.key_feedback : "-");
-    }
-
-    private void fetchAndDisplayBestMealDetails(String date, String label, double dayAvg) {
-        tvBestMeal.setText(label + " (" + String.format(Locale.getDefault(), "%.1f", dayAvg) + getString(R.string.unit_points) + ")");
-
-        apiService.getToday(date).enqueue(new Callback<DailyMeals>() {
-            @Override
-            public void onResponse(Call<DailyMeals> call, Response<DailyMeals> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    DailyMeals dm = response.body();
-                    MealSchema bestMeal = null;
-                    double maxRating = -1;
-
-                    // Find the best meal among B/L/D of that day
-                    if (dm.breakfast != null && dm.breakfast.avg_rating > maxRating) {
-                        maxRating = dm.breakfast.avg_rating;
-                        bestMeal = dm.breakfast;
-                    }
-                    if (dm.lunch != null && dm.lunch.avg_rating > maxRating) {
-                        maxRating = dm.lunch.avg_rating;
-                        bestMeal = dm.lunch;
-                    }
-                    if (dm.dinner != null && dm.dinner.avg_rating > maxRating) {
-                        maxRating = dm.dinner.avg_rating;
-                        bestMeal = dm.dinner;
-                    }
-
-                    if (bestMeal != null) {
-                        try {
-                            SimpleDateFormat in = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                            SimpleDateFormat out = new SimpleDateFormat("M/d (E)", Locale.KOREA);
-                            String dateLabel = out.format(in.parse(date));
-
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(dateLabel).append(" ").append(bestMeal.meal_type)
-                                    .append(" [").append(String.format(Locale.getDefault(), "%.1f", bestMeal.avg_rating))
-                                    .append(getString(R.string.unit_points)).append("]\n");
-
-                            if (bestMeal.foods != null) {
-                                for (int i = 0; i < bestMeal.foods.size(); i++) {
-                                    sb.append(bestMeal.foods.get(i));
-                                    if (i < bestMeal.foods.size() - 1) sb.append(", ");
-                                }
-                            }
-                            tvBestMeal.setText(sb.toString());
-                        } catch (Exception ignored) {
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DailyMeals> call, Throwable t) {
-            }
-        });
     }
 
     private void resetAiComment() {

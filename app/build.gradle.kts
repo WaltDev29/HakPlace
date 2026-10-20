@@ -19,8 +19,8 @@ android {
         applicationId = "kr.ac.waltdev29.hakplace"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -32,8 +32,26 @@ android {
         buildConfigField("String", "API_URL", "\"${properties.getProperty("api.url") ?: ""}\"")
     }
 
+    signingConfigs {
+        create("release") {
+            val properties = Properties()
+            val propertiesFile = project.rootProject.file("local.properties")
+            if (propertiesFile.exists()) {
+                properties.load(propertiesFile.inputStream())
+                val storeFilePath = properties.getProperty("store.file")
+                if (storeFilePath != null) {
+                    storeFile = file(storeFilePath)
+                    storePassword = properties.getProperty("store.password")
+                    keyAlias = properties.getProperty("key.alias")
+                    keyPassword = properties.getProperty("key.password")
+                }
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
