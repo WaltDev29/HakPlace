@@ -14,7 +14,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="2dp">
 
         <LinearLayout
@@ -79,10 +79,11 @@
             android:background="@drawable/bg_filter_button"
             android:drawableStart="@drawable/ic_calendar"
             android:drawablePadding="8dp"
+            android:drawableTint="@color/on_surface"
             android:paddingHorizontal="16dp"
-            android:text="기간 선택"
+            android:text="@string/period_select"
             android:textAllCaps="false"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="@color/on_surface"
             android:textSize="14sp"
             android:gravity="start|center_vertical" />
 
@@ -93,7 +94,7 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/bg_filter_button"
             android:paddingHorizontal="16dp"
-            android:text="전체 기간"
+            android:text="@string/all_period_select"
             android:textAllCaps="false"
             android:textColor="@color/primary"
             android:textSize="14sp"
@@ -129,7 +130,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="전체"
+                    android:text="@string/filter_all"
                     android:checked="true"
                     android:textColor="@color/chip_text_selector"
                     app:chipBackgroundColor="@color/chip_bg_selector" />
@@ -139,7 +140,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="조식"
+                    android:text="@string/breakfast"
                     android:textColor="@color/chip_text_selector"
                     app:chipBackgroundColor="@color/chip_bg_selector" />
 
@@ -148,7 +149,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="중식"
+                    android:text="@string/lunch"
                     android:textColor="@color/chip_text_selector"
                     app:chipBackgroundColor="@color/chip_bg_selector" />
 
@@ -157,7 +158,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="석식"
+                    android:text="@string/dinner"
                     android:textColor="@color/chip_text_selector"
                     app:chipBackgroundColor="@color/chip_bg_selector" />
             </com.google.android.material.chip.ChipGroup>
@@ -173,22 +174,42 @@
             android:gravity="center"
             android:paddingStart="12dp"
             android:paddingEnd="24dp"
-            android:text="최신순"
+            android:text="@string/sort_newest"
             android:textAllCaps="false"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="@color/on_surface"
             android:textSize="13sp" />
     </LinearLayout>
 
-    <!-- Review List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvReviews"
+    <!-- Review List & Empty State Container -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="16dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_review" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReviews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_review" />
+
+        <TextView
+            android:id="@+id/tvEmptyReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_edit_document"
+            android:drawablePadding="12dp"
+            android:drawableTint="@color/outline"
+            android:gravity="center"
+            android:text="@string/no_reviews"
+            android:textColor="@color/on_surface_variant"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

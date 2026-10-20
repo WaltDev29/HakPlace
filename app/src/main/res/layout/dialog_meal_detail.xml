@@ -130,7 +130,7 @@
             android:background="@drawable/bg_button_outline"
             android:text="@string/view_reviews"
             android:textAllCaps="false"
-            android:textColor="@color/on_surface"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>

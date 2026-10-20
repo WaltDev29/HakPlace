@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="24dp"
+    app:cardBackgroundColor="@color/surface"
     app:cardCornerRadius="28dp"
     app:cardElevation="8dp">
 
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="알림"
+            android:text="@string/dialog_default_notice"
             android:textColor="@color/on_surface"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -62,7 +63,7 @@
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="확인"
+            android:text="@string/dialog_confirm"
             android:textSize="14sp"
             android:textStyle="bold"
             app:cornerRadius="28dp" />

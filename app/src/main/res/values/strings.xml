@@ -98,6 +98,7 @@
     <string name="sort_rating_low">평점 낮은 순</string>
     <string name="my_reviews">내 리뷰</string>
     <string name="error_review_load">리뷰를 불러올 수 없습니다.</string>
+    <string name="no_reviews">등록된 리뷰가 없습니다.</string>
 
     <!-- Menu Today -->
     <string name="info_not_found">정보 없음</string>
@@ -112,7 +113,7 @@
     <string name="duplicate_review_msg">이미 이 식단에 리뷰를 작성하셨습니다.</string>
     <string name="status_check_failed">상태 확인 실패</string>
 
-    <!-- Common Messages -->
+    <!-- Common Messages & Dialogs -->
     <string name="input_error">입력 오류</string>
     <string name="login_input_prompt">학번과 비밀번호를 입력해주세요.</string>
     <string name="login_failed">로그인 실패</string>
@@ -120,4 +121,68 @@
     <string name="connection_failed">연결 실패</string>
     <string name="connection_failed_msg">서버 연결에 실패했습니다: %s</string>
     <string name="msg_confirm_review_submit">작성하신 리뷰를 등록하시겠습니까?</string>
+    <string name="dialog_confirm">확인</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_close">닫기</string>
+    <string name="dialog_default_notice">알림</string>
+
+    <!-- Notification Settings & Messages -->
+    <string name="notification_settings_title">식단 알림 설정</string>
+    <string name="system_notification_disabled_title">⚠️ 기기 알림이 꺼져 있습니다</string>
+    <string name="system_notification_disabled_msg">스마트폰 설정에서 알림을 허용해야 학식 알림을 정상적으로 수신할 수 있습니다.</string>
+    <string name="btn_go_system_settings">기기 알림 켜러 가기</string>
+    <string name="notify_daily_all_title">전체 학식 알림 (오전 08:00)</string>
+    <string name="notify_lunch_title">점심 학식 알림 (오전 11:30)</string>
+    <string name="notify_dinner_title">저녁 학식 알림 (오후 05:30)</string>
+    <string name="notification_permission_required_title">알림 권한 필요</string>
+    <string name="notification_permission_required_msg">기기 설정에서 HakPlace 알림이 차단되어 있습니다.\n설정 화면으로 이동하여 알림을 허용하시겠습니까?</string>
+    
+    <!-- Notification Helper -->
+    <string name="notif_channel_name">학식 알림</string>
+    <string name="notif_channel_desc">매일 아침 전체 학식 및 중식/석식 메뉴 알림을 수신합니다.</string>
+    <string name="notif_daily_all_title">🍱 %s 오늘의 학식 메뉴</string>
+    <string name="notif_breakfast_label">🌅 [조식]</string>
+    <string name="notif_lunch_label">☀️ [중식]</string>
+    <string name="notif_dinner_label">🌙 [석식]</string>
+    <string name="notif_no_service">운영 없음</string>
+    <string name="notif_daily_all_summary">조식, 중식, 석식 메뉴를 확인해 보세요!</string>
+    <string name="notif_daily_all_summary_lunch">점심 대표: %s</string>
+    <string name="notif_lunch_title">☀️ 오늘의 점심 메뉴 도착!</string>
+    <string name="notif_lunch_no_service">금일 점심 운영이 없습니다.</string>
+    <string name="notif_dinner_title">🌙 오늘의 저녁 메뉴 도착!</string>
+    <string name="notif_dinner_no_service">금일 저녁 운영이 없습니다.</string>
+    <string name="notif_rating_format">⭐ 평균 평점: %.1f / 5.0</string>
+
+    <!-- MyPage & Auth -->
+    <string name="logout">로그아웃</string>
+    <string name="logout_confirm_msg">정말 로그아웃 하시겠습니까?</string>
+    <string name="logout_success">로그아웃 되었습니다.</string>
+    <string name="user_info_loading">사용자 정보를 불러오는 중입니다.</string>
+    <string name="user_info_error">사용자 정보를 불러올 수 없습니다.</string>
+    <string name="signup_success">회원가입 성공! 로그인해주세요.</string>
+    <string name="signup_fail">가입 실패</string>
+    <string name="signup_fail_exist">회원가입 실패: 이미 존재하는 학번이거나 잘못된 요청입니다.</string>
+    <string name="validation_student_id">학번은 10자리 숫자로 입력해 주세요.</string>
+    <string name="validation_password">비밀번호는 영문과 숫자를 모두 포함하여 8자 이상이어야 합니다.</string>
+    <string name="validation_all_fields">모든 정보를 입력해 주세요.</string>
+    <string name="validation_password_mismatch">비밀번호가 일치하지 않습니다.</string>
+    <string name="image_process_error">이미지를 처리하는 중 오류가 발생했습니다.</string>
+
+    <!-- Statistics -->
+    <string name="stat_weekly">주차별</string>
+    <string name="stat_monthly">월별</string>
+    <string name="stat_top_foods">메뉴별 평점 TOP 3</string>
+    <string name="stat_ai_analysis">AI 분석 코멘트</string>
+    <string name="stat_trend">📈 변화 추이</string>
+    <string name="stat_best_meal">🏆 베스트 식단</string>
+    <string name="stat_key_points">📌 키 포인트</string>
+
+    <!-- Additional Common & Date Formats -->
+    <string name="filter_all">전체</string>
+    <string name="system_error_title">시스템 오류</string>
+    <string name="date_format_notification">M월 d일 (E)</string>
+    <string name="date_format_menu">M월 d일 (E)</string>
+    <string name="date_format_month_day">M월 d일</string>
+    <string name="date_format_stat_weekly">MM월 dd일</string>
+    <string name="date_format_stat_monthly">yyyy년 MM월</string>
 </resources>

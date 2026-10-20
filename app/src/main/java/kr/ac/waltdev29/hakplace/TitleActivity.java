@@ -1,32 +1,58 @@
 package kr.ac.waltdev29.hakplace;
 
+import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import kr.ac.waltdev29.hakplace.utils.MealNotificationScheduler;
+import kr.ac.waltdev29.hakplace.utils.NotificationHelper;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 
 public class TitleActivity extends AppCompatActivity {
 
     private static final int SPLASH_DELAY = 1000;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                checkAuthAndNavigate();
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title);
 
-        new Handler().postDelayed(new Runnable() {
+        // 알림 채널 생성 및 기본 식단 알림 스케줄러(08:00, 11:30, 17:30) 등록
+        NotificationHelper.createNotificationChannel(this);
+        MealNotificationScheduler.scheduleAll(this);
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                checkAuthAndNavigate();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        ContextCompat.checkSelfPermission(TitleActivity.this, Manifest.permission.POST_NOTIFICATIONS)
+                                != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                } else {
+                    checkAuthAndNavigate();
+                }
             }
         }, SPLASH_DELAY);
     }
 
     private void checkAuthAndNavigate() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        String token = prefs.getString("access_token", null);
-        boolean isAutoLogin = prefs.getBoolean("auto_login", false);
+        TokenManager tokenManager = TokenManager.getInstance(this);
+        String token = tokenManager.getAccessToken();
+        boolean isAutoLogin = tokenManager.isAutoLogin();
 
         if (token != null && !token.isEmpty() && isAutoLogin) {
             // Validate token
@@ -65,7 +91,6 @@ public class TitleActivity extends AppCompatActivity {
     }
 
     private void clearToken() {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        prefs.edit().remove("access_token").remove("auto_login").apply();
+        TokenManager.getInstance(this).clearAuth();
     }
 }

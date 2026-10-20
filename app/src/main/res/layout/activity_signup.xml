@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="@color/white"
+            android:background="@color/surface"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -107,6 +107,8 @@
                 android:inputType="text"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Student ID -->
@@ -131,6 +133,8 @@
                 android:inputType="text"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Birth Date -->
@@ -156,6 +160,8 @@
                 android:inputType="none"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Phone -->
@@ -180,6 +186,8 @@
                 android:inputType="phone"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Gender -->
@@ -251,6 +259,8 @@
                 android:inputType="textPassword"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Confirm Password -->
@@ -275,6 +285,8 @@
                 android:inputType="textPassword"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/outline"
                 android:textSize="14sp" />
 
             <!-- Hint Box -->
