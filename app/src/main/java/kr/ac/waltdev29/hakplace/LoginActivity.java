@@ -1,7 +1,7 @@
 package kr.ac.waltdev29.hakplace;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import kr.ac.waltdev29.hakplace.utils.TokenManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -96,12 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveToken(String studentId, String token, boolean autoLogin) {
-        SharedPreferences prefs = getSharedPreferences("hakplace_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("student_id", studentId);
-        editor.putString("access_token", token);
-        editor.putBoolean("auto_login", autoLogin);
-        editor.apply();
+        TokenManager.getInstance(this).saveAuth(studentId, token, autoLogin);
     }
 
 }

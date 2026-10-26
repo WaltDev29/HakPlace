@@ -16,9 +16,11 @@ public class ErrorUtils {
                     return ((org.json.JSONArray) detail).getJSONObject(0).getString("msg");
                 }
             }
-            return "알 수 없는 오류가 발생했습니다.";
+            boolean isJa = java.util.Locale.getDefault().getLanguage().equals("ja");
+            return isJa ? "不明なエラーが発生しました。" : "알 수 없는 오류가 발생했습니다.";
         } catch (Exception e) {
-            return "오류 응답을 처리하는 중 문제가 발생했습니다.";
+            boolean isJa = java.util.Locale.getDefault().getLanguage().equals("ja");
+            return isJa ? "エラー応答の処理中に問題が発生しました。" : "오류 응답을 처리하는 중 문제가 발생했습니다.";
         }
     }
 }

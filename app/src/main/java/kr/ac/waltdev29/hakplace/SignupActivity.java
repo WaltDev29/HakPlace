@@ -56,7 +56,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("생년월일 선택")
+                .setTitleText(getString(R.string.birth_date_label))
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setTheme(R.style.CustomMaterialCalendar)
                 .build();
@@ -87,22 +87,24 @@ public class SignupActivity extends AppCompatActivity {
 
         if (name.isEmpty() || studentId.isEmpty() || birthDate.isEmpty() || phone.isEmpty() || password.isEmpty()
                 || confirmPassword.isEmpty() || gender.isEmpty()) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "모든 정보를 입력해 주세요.", null);
+            DialogHelper.showNotificationDialog(this, getString(R.string.input_error), getString(R.string.validation_all_fields), null);
             return;
         }
 
-        if (studentId.length() != 10) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "학번 10자리를 정확히 입력해 주세요.", null);
+        if (!studentId.matches("^\\d{10}$")) {
+            DialogHelper.showNotificationDialog(this, getString(R.string.input_error), getString(R.string.validation_student_id), null);
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호가 일치하지 않습니다.", null);
+            DialogHelper.showNotificationDialog(this, getString(R.string.input_error), getString(R.string.validation_password_mismatch), null);
             return;
         }
 
-        if (password.length() < 8) {
-            DialogHelper.showNotificationDialog(this, "입력 오류", "비밀번호는 영문, 숫자 포함 8자 이상이어야 합니다.", null);
+        // 영문과 숫자를 반드시 포함하여 8자 이상인지 정규식 검증
+        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$";
+        if (!password.matches(passwordPattern)) {
+            DialogHelper.showNotificationDialog(this, getString(R.string.input_error), getString(R.string.validation_password), null);
             return;
         }
 
@@ -121,21 +123,21 @@ public class SignupActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 btnSignup.setEnabled(true);
                 if (response.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this, "회원가입 성공! 로그인해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    String errorMsg = "회원가입 실패: 이미 존재하는 학번이거나 잘못된 요청입니다.";
+                    String errorMsg = getString(R.string.signup_fail_exist);
                     if (response.errorBody() != null) {
                         errorMsg = kr.ac.waltdev29.hakplace.api.ErrorUtils.parseError(response.errorBody());
                     }
-                    DialogHelper.showNotificationDialog(SignupActivity.this, "가입 실패", errorMsg, null);
+                    DialogHelper.showNotificationDialog(SignupActivity.this, getString(R.string.signup_fail), errorMsg, null);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 btnSignup.setEnabled(true);
-                DialogHelper.showNotificationDialog(SignupActivity.this, "연결 실패", "서버 연결에 실패했습니다: " + t.getMessage(), null);
+                DialogHelper.showNotificationDialog(SignupActivity.this, getString(R.string.connection_failed), String.format(getString(R.string.connection_failed_msg), t.getMessage()), null);
             }
         });
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 다크 모드 브랜드 컬러 (Material 3 Dark) -->
+    <color name="primary">#4CAF50</color>
+    <color name="primary_container">#1B5E20</color>
+    <color name="on_primary">#003300</color>
+    
+    <color name="secondary">#81C784</color>
+    <color name="secondary_container">#2E4E32</color>
+    
+    <!-- 배경 및 서피스 다크 컬러 -->
+    <color name="background">#121212</color>
+    <color name="on_background">#FFFFFF</color>
+    
+    <color name="surface">#1E1E1E</color>
+    <color name="on_surface">#FFFFFF</color>
+    <color name="surface_variant">#2A2A2A</color>
+    
+    <color name="outline">#8E9189</color>
+    <color name="outline_variant">#444748</color>
+    <color name="on_surface_variant">#E0E0E0</color>
+    
+    <color name="error">#CF6679</color>
+    <color name="primary_variant">#66BB6A</color>
+    <color name="on_secondary_container">#C9E7CA</color>
+    
+    <!-- 투명도 및 커스텀 변형 -->
+    <color name="primary_80">#CC4CAF50</color>
+    <color name="primary_40">#664CAF50</color>
+    <color name="primary_20">#334CAF50</color>
+    
+    <color name="surface_container_low">#181818</color>
+    <color name="surface_container">#242424</color>
+    <color name="surface_container_high">#2E2E2E</color>
+    <color name="surface_container_highest">#383838</color>
+    <color name="surface_container_lowest">#1E1E1E</color>
+    <color name="ai_insight_bg">#2A3F2C</color>
+    <color name="star_yellow">#FFD54F</color>
+    <color name="info_box_bg">#243825</color>
+    
+    <color name="black">#FF000000</color>
+
+    <color name="bg_emerald_top_right">#1F3520</color>
+    <color name="bg_emerald_bottom_left">#142415</color>
+    <color name="white">#FFFFFFFF</color> <!-- 로고 카드 등 영구 흰색 보장 -->
+</resources>

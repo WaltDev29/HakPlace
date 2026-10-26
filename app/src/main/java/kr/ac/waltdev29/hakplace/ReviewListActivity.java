@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 public class ReviewListActivity extends AppCompatActivity {
 
     private RecyclerView rvReviews;
+    private TextView tvEmptyReview;
     private ReviewAdapter adapter;
     private ApiService apiService;
     private android.widget.Button btnSort;
@@ -63,6 +65,7 @@ public class ReviewListActivity extends AppCompatActivity {
         apiService = ApiClient.getClient().create(ApiService.class);
 
         rvReviews = findViewById(R.id.rvReviews);
+        tvEmptyReview = findViewById(R.id.tvEmptyReview);
         btnSort = findViewById(R.id.btnSort);
         btnDateRange = findViewById(R.id.btnDateRange);
         btnAllPeriod = findViewById(R.id.btnAllPeriod);
@@ -109,9 +112,12 @@ public class ReviewListActivity extends AppCompatActivity {
 
         // Initial check for meal type chips based on intent
         if (currentMealTypeFilter != null) {
-            if ("조식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipBreakfast);
-            else if ("중식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipLunch);
-            else if ("석식".equals(currentMealTypeFilter)) chipGroupMealType.check(R.id.chipDinner);
+            if ("조식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipBreakfast);
+            else if ("중식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipLunch);
+            else if ("석식".equals(currentMealTypeFilter))
+                chipGroupMealType.check(R.id.chipDinner);
         }
 
         // Initial fetch: all reviews for today or filtered range
@@ -217,7 +223,6 @@ public class ReviewListActivity extends AppCompatActivity {
         }
     }
 
-
     private void updateMealTypeFilter() {
         int checkedId = chipGroupMealType.getCheckedChipId();
         if (checkedId == R.id.chipAll) {
@@ -229,7 +234,7 @@ public class ReviewListActivity extends AppCompatActivity {
         } else if (checkedId == R.id.chipDinner) {
             currentMealTypeFilter = "석식";
         }
-        
+
         // Update display list from cached data
         updateDisplayList();
     }
@@ -239,7 +244,7 @@ public class ReviewListActivity extends AppCompatActivity {
         ivHeaderIcon.setImageResource(R.drawable.ic_edit_document);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(v -> finish());
-        
+
         findViewById(R.id.bottomNav).setVisibility(View.GONE);
     }
 
@@ -268,7 +273,9 @@ public class ReviewListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ReviewList> call, Throwable t) {
-                        Toast.makeText(ReviewListActivity.this, getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReviewListActivity.this,
+                                getString(R.string.msg_network_error) + ": " + t.getMessage(), Toast.LENGTH_LONG)
+                                .show();
                         android.util.Log.e("ReviewList", "Network Failure", t);
                     }
                 });
@@ -300,6 +307,14 @@ public class ReviewListActivity extends AppCompatActivity {
         });
 
         adapter.setReviews(displayList);
+
+        if (displayList.isEmpty()) {
+            tvEmptyReview.setVisibility(View.VISIBLE);
+            rvReviews.setVisibility(View.GONE);
+        } else {
+            tvEmptyReview.setVisibility(View.GONE);
+            rvReviews.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupBottomNav() {

@@ -39,8 +39,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         ReviewResponse review = reviews.get(position);
 
-        // Use meal_type directly from API
-        holder.tvMealType.setText(review.meal_type != null ? review.meal_type : holder.itemView.getContext().getString(R.string.meal_label));
+        // Use meal_type mapped to localized string
+        String displayMealType = review.meal_type;
+        if ("조식".equals(displayMealType)) {
+            displayMealType = holder.itemView.getContext().getString(R.string.breakfast);
+        } else if ("중식".equals(displayMealType)) {
+            displayMealType = holder.itemView.getContext().getString(R.string.lunch);
+        } else if ("석식".equals(displayMealType)) {
+            displayMealType = holder.itemView.getContext().getString(R.string.dinner);
+        }
+        holder.tvMealType.setText(displayMealType != null ? displayMealType : holder.itemView.getContext().getString(R.string.meal_label));
         
         holder.tvRating.setText(String.format(Locale.getDefault(), "%.1f", review.rating));
         holder.tvComment.setText(review.review_comment);
@@ -50,7 +58,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date = inputFormat.parse(review.meal_date);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("M/d (E)", Locale.KOREAN);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("M/d (E)", Locale.getDefault());
             holder.tvDate.setText(outputFormat.format(date));
         } catch (Exception e) {
             holder.tvDate.setText(review.meal_date);

@@ -4,14 +4,14 @@
     <item>
         <shape>
             <corners android:topLeftRadius="12dp" android:topRightRadius="12dp" />
-            <solid android:color="#BFCABA" />
+            <solid android:color="@color/outline_variant" />
         </shape>
     </item>
     <!-- Main Background (Offset by 1dp from top to show border) -->
     <item android:top="1dp">
         <shape>
             <corners android:topLeftRadius="12dp" android:topRightRadius="12dp" />
-            <solid android:color="@color/white" />
+            <solid android:color="@color/surface" />
         </shape>
     </item>
 </layer-list>

@@ -14,7 +14,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="2dp">
 
         <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="평점 통계"
+                android:text="@string/tab_stats"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -72,7 +72,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="주차별"
+                    android:text="@string/stat_weekly"
                     android:textColor="@color/primary"
                     app:cornerRadius="12dp"
                     app:strokeColor="@color/outline_variant" />
@@ -83,7 +83,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="월별"
+                    android:text="@string/stat_monthly"
                     android:textColor="@color/on_surface_variant"
                     app:cornerRadius="12dp"
                     app:strokeColor="@color/outline_variant" />
@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
 
@@ -195,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
 
@@ -209,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="메뉴별 평점 TOP 3"
+                        android:text="@string/stat_top_foods"
                         android:textColor="@color/on_surface"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -255,7 +255,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="AI 분석 코멘트"
+                            android:text="@string/stat_ai_analysis"
                             android:textColor="@color/primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -281,7 +281,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="📈 변화 추이"
+                        android:text="@string/stat_trend"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -299,7 +299,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="🏆 베스트 식단"
+                        android:text="@string/stat_best_meal"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -317,7 +317,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="📌 키 포인트"
+                        android:text="@string/stat_key_points"
                         android:textColor="@color/on_surface"
                         android:textSize="13sp"
                         android:textStyle="bold" />
